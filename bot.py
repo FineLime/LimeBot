@@ -194,7 +194,7 @@ async def on_message(message):
 
     if msg.startswith(";say "): 
         
-        if message.author.server_permissions.manage_messages: 
+        if message.author.server_permissions.kick_members: 
             await bot.send_message(message.channel, message.content[5:])
             await bot.delete_message(message)
 
@@ -279,7 +279,7 @@ async def on_message(message):
   
     if msg.startswith(";warn "): 
         
-        if message.author.server_permissions.manage_messages and message.author.top_role.position > message.mentions[0].top_role.position: 
+        if message.author.server_permissions.kick_members and message.author.top_role.position > message.mentions[0].top_role.position: 
             warn = message.content.split(" ")
 
             try: 
