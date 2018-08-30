@@ -628,4 +628,4 @@ async def on_message(message):
 
 
 
-bot.run(process.env.BOT_TOKEN)
+bot.run(os.getenv('TOKEN'))
