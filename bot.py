@@ -651,7 +651,7 @@ async def on_message(message):
                 await bot.send_message(message.channel, "Usage: ;rps [rock/paper/scissors]")
             cooldown_rps.append(message.author.id)
             await asyncio.sleep(cooldown)
-            cooldown.remove(message.author.id)    
+            cooldown_rps.remove(message.author.id)    
 
 
 
