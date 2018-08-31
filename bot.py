@@ -27,7 +27,7 @@ cooldown = 60
 
 modRole = False
 
-streamTime = "19:00"
+streamTime = "18:00"
 isStreaming = False
 endStream = False
 
@@ -591,7 +591,7 @@ async def on_message(message):
             cooldown_live.remove(message.author.id)
     
     if msg.startswith(";setstreamtime "):
-        if message.author.server_permissions.administrator:
+        if message.author.server_permissions.manage_server:
              
             if msg[15:] == "false":
                 streamTime = False
@@ -614,12 +614,40 @@ async def on_message(message):
     if msg.startswith(";blacklist "): 
         if message.author.server_permissions.manage_server: 
             try:
-                blacklist.append(message.mentions[0].id)
-                await bot.send_message(message.channel, "The user was blacklisted! :white_check_mark:")
+                if message.mentions[0].id not in blacklist:
+                    blacklist.append(message.mentions[0].id)
+                    await bot.send_message(message.channel, "The user was blacklisted! :white_check_mark:")
+                else: 
+                    await bot.send_message(message.channel, "The user is already blacklisted!")
             except:
                 await bot.send_message(message.channel, "Failed to blacklist a user!")
         else:
             await bot.send_message(message.channel, "Sorry, you don't have permission to use that command!")
+            
+    if msg.startswith(";rps "): 
+        botchoice = random.choice(["rock", "paper", "scissors"])
+        choice = msg.split(" ")
+        userchoice = choice[1] 
+        if botchoice == userchoice: 
+            await bot.send_message(message.channel, "Rock.. Paper.. Scissors.. we both chose " + botchoice + "... it's a draw!")
+        elif userchoice == "rock": 
+            if botchoice == "scissors": 
+                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose scissors, you win!")
+            else:
+                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose paper, you lose!")
+        elif userchoice == "paper": 
+            if botchoice == "rock": 
+                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose rock, you win!")
+            else:
+                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose scissors, you lose!")
+        elif userchoice == "scissors":
+            if botchoice == "paper":
+                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose paper, you win!")
+            else:
+                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose rock, you lose!")
+        else:
+            await bot.send_message(message.channel, "Usage: ;rps [rock/paper/scissors]")
+                
 
 
 
