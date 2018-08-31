@@ -1,7 +1,6 @@
 import discord
 from discord.utils import get
 from discord.ext import commands
-from OofSendHelp import token
 import asyncio
 import random
 from datetime import datetime
