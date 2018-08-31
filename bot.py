@@ -4,6 +4,7 @@ from discord.ext import commands
 import asyncio
 import random
 from datetime import datetime
+import os
 
 bot = commands.Bot(command_prefix=';')
 count = 1
