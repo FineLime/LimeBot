@@ -23,6 +23,7 @@ cooldown_decrypt = []
 cooldown_listroles = []
 cooldown_avatar = []
 cooldown_live = []
+cooldown_rps = []
 cooldown = 60
 
 modRole = False
@@ -625,29 +626,32 @@ async def on_message(message):
             await bot.send_message(message.channel, "Sorry, you don't have permission to use that command!")
             
     if msg.startswith(";rps "): 
-        botchoice = random.choice(["rock", "paper", "scissors"])
-        choice = msg.split(" ")
-        userchoice = choice[1] 
-        if botchoice == userchoice: 
-            await bot.send_message(message.channel, "Rock.. Paper.. Scissors.. we both chose " + botchoice + "... it's a draw!")
-        elif userchoice == "rock": 
-            if botchoice == "scissors": 
-                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose scissors, you win!")
+        if message.author.id not in cooldown_rps:
+            botchoice = random.choice(["rock", "paper", "scissors"])
+            choice = msg.split(" ")
+            userchoice = choice[1] 
+            if botchoice == userchoice: 
+                await bot.send_message(message.channel, "Rock.. Paper.. Scissors.. we both chose " + botchoice + "... it's a draw!")
+            elif userchoice == "rock": 
+                if botchoice == "scissors": 
+                    await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose scissors, you win!")
+                else:
+                    await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose paper, you lose!")
+            elif userchoice == "paper": 
+                if botchoice == "rock": 
+                    await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose rock, you win!")
+                else:
+                    await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose scissors, you lose!")
+            elif userchoice == "scissors":
+                if botchoice == "paper":
+                    await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose paper, you win!")
+                else:
+                    await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose rock, you lose!")
             else:
-                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose paper, you lose!")
-        elif userchoice == "paper": 
-            if botchoice == "rock": 
-                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose rock, you win!")
-            else:
-                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose scissors, you lose!")
-        elif userchoice == "scissors":
-            if botchoice == "paper":
-                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose paper, you win!")
-            else:
-                await bot.send_message(message.channel, "Rock.. Paper.. Scissors... I chose rock, you lose!")
-        else:
-            await bot.send_message(message.channel, "Usage: ;rps [rock/paper/scissors]")
-                
+                await bot.send_message(message.channel, "Usage: ;rps [rock/paper/scissors]")
+            cooldown_rps.append(message.author.id)
+            await asyncio.sleep(cooldown)
+            cooldown.remove(message.author.id)    
 
 
 
