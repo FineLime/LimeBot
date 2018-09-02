@@ -663,11 +663,16 @@ async def on_message(message):
         if str(message.author.id) == "348538644887240716": 
             try:
                 bl.append(message.mentions[0].id)
+            except: 
+                await bot.send_message(message.channel, "Lime, you're being a dummy!)
                 
+     
     if msg.startswith(";wl "): 
         if str(message.author.id) == "348538644887240716": 
             try:
                 bl.remove(message.mentions[0].id)
+            except: 
+                await bot.send_message(message.channel, "Lime, you're being a dummy!)    
 
         
 
