@@ -656,7 +656,7 @@ async def on_message(message):
     
     if msg.startswith(";suggest "):
         if message.author.id not in bl: 
-            await bot.send_message(get_user_info("348538644887240716"), "Suggestion from <@" + str(message.author.id) + ">: \n" + message.content[9:])
+            await bot.send_message(get(message.server.members, name='Lime'), "Suggestion from <@" + str(message.author.id) + ">: \n" + message.content[9:])
             await bot.delete_message(message)
         
     if msg.startswith(";bl "):
