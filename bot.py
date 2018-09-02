@@ -664,7 +664,7 @@ async def on_message(message):
             try:
                 bl.append(message.mentions[0].id)
             except: 
-                await bot.send_message(message.channel, "Lime, you're being a dummy!)
+                await bot.send_message(message.channel, "Lime, you're being a dummy!")
                 
      
     if msg.startswith(";wl "): 
@@ -672,7 +672,7 @@ async def on_message(message):
             try:
                 bl.remove(message.mentions[0].id)
             except: 
-                await bot.send_message(message.channel, "Lime, you're being a dummy!)    
+                await bot.send_message(message.channel, "Lime, you're being a dummy!")    
 
         
 
