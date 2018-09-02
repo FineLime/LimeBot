@@ -36,6 +36,7 @@ giveawaymsg = False
 giveawayids = []
 
 blacklist = []
+bl = []
 
 @bot.event
 async def on_ready():
@@ -59,6 +60,7 @@ async def on_message(message):
     global marriedList
     global streamTime 
     global blacklist
+    global bl
 
     if message.author.bot: 
         if message.channel == cchannel and message.content.startswith("The") == False: 
@@ -144,6 +146,8 @@ async def on_message(message):
         embed.add_field(name=";cooldown [Number]", value="Edits the cooldown for certain commands.", inline=False)
         embed.add_field(name=";game [Name]", value="Changed the name of the game LimeBot is playing.\n", inline=False)
         embed.add_field(name=";setstreamtime [Time]", value="Changes the streamtime, turns it off if set to false.")
+        embed.add_field(name=";blacklist [Mention]", value="Blacklists a user from using the bot.", inline=False)
+        embed.add_field(name=";whitelist [Mention", value="Whitelists a user from using the bot.", inline=False)
 
 
         embed.add_field(name="**__FUN COMMANDS:__**:", value="Fun commands for all to use.", inline=False)
@@ -154,6 +158,7 @@ async def on_message(message):
         embed.add_field(name=";slots", value="Slot machine. (Low chance of winning)", inline=False)
         embed.add_field(name=";encrypt [Shift (0-26)] [Message]", value="Encrypts a message.", inline=False)
         embed.add_field(name=";decrypt [Shift (0-26)] [Message]", value="Decrypts a message.\n", inline=False)
+        embed.add_field(name=";rps [Rock/Paper/Scissors]", value="Play a game of rock paper scissors with the bot.\n", inline = False)
 
 
         embed.add_field(name="**__USEFUL COMMANDS:__**", value="Useful commands if you are in need of something.", inline=False)
@@ -162,6 +167,7 @@ async def on_message(message):
         embed.add_field(name=";avatar (Mention)", value="Retrives your or someone elses avatar.", inline=False)
         embed.add_field(name=";nick (Mention) [Name]", value="Changed your (or the mentioned user's) nickname.")
         embed.add_field(name=";live", value="Tells you when paploo is live.")
+        embed.add_field(name=";suggest [Message]", value="Suggest a feauture to the bot.")
 
         await bot.send_message(message.author, embed=embed)
         await bot.send_message(message.channel, "I have dm'd you with avalible commands! :white_check_mark:")
@@ -447,7 +453,7 @@ async def on_message(message):
             try: 
                 mutedrole = get(message.server.roles, name = "Muted")
             except: 
-                await bot.create_role(message.author.server, name = "Muted")
+                await bot.create_role(message.server, name = "Muted")
                 mutedrole = get(message.server.roles, name = "Muted")
 
             try: 
@@ -468,7 +474,7 @@ async def on_message(message):
             try: 
                 mutedrole = get(message.server.roles, name = "Muted")
             except: 
-                await bot.create_role(message.author.server, name = "Muted")
+                await bot.create_role(message.server, name = "Muted")
                 await bot.send_message(message.server, "There isn't even a muted role silly, but here, I made one for you!")
                 return
             try: 
@@ -524,11 +530,6 @@ async def on_message(message):
                 await bot.send_message(message.channel, "Failed to get an avatar!")
         else: 
             await bot.send_message(message.channel, "Sorry, there's a cooldown for that command!")
-    
-    if msg.startswith(";userinfo"): 
-        await bot.send_message(message.channel, message.server.member[0])
-
-
 
     if msg.startswith(";nick "):
         
@@ -652,8 +653,21 @@ async def on_message(message):
             cooldown_rps.append(message.author.id)
             await asyncio.sleep(cooldown)
             cooldown_rps.remove(message.author.id)    
-
-
+    
+    if msg.startswith(";suggest "):
+        if message.author.id not in bl: 
+            await bot.send_message(get_user_info("348538644887240716"), "Suggestion from <@" + str(message.author.id) + ">: \n" + message.content[9:])
+            await bot.delete_message(message)
+        
+    if msg.startswith(";bl "):
+        if str(message.author.id) == "348538644887240716": 
+            try:
+                bl.append(message.mentions[0].id)
+                
+    if msg.startswith(";wl "): 
+        if str(message.author.id) == "348538644887240716": 
+            try:
+                bl.remove(message.mentions[0].id)
 
         
 
