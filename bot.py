@@ -616,7 +616,10 @@ async def on_message(message):
                 
     if msg.startswith(";editlast "): 
         if message.author.server_permissions.kick_members:
-            await bot.edit_message(botmsg, msg[9:]) 
+            await bot.edit_message(botmsg, message.content[9:]) 
+            await bot.delete_message(message)
+        else: 
+            await bot.send_message(message.channel, "Sorry, you do not have permission to use that command!")
 
         
 
