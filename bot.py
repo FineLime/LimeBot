@@ -24,7 +24,9 @@ cooldown_listroles = []
 cooldown_avatar = []
 cooldown_live = []
 cooldown_rps = []
-cooldown = 60
+cooldown = 20
+
+botmsg = False
 
 modRole = False
 
@@ -49,9 +51,6 @@ async def on_ready():
 @bot.event
 async def on_message(message): 
 
-    global cchannel
-    global count 
-    global pcounter
     global isAdmin
     global isMod
     global isTester
@@ -61,12 +60,11 @@ async def on_message(message):
     global streamTime 
     global blacklist
     global bl
+    global botmsg
 
     if message.author.bot: 
-        if message.channel == cchannel and message.content.startswith("The") == False: 
-            await asyncio.sleep(5)
-            await bot.delete_message(message)
-
+        if msg.author.id == bot.user.id:
+            botmsg = message
         return
 
     if str(message.server) == "None":
@@ -74,63 +72,7 @@ async def on_message(message):
 
     msg = message.content.lower()
 
-    if msg.startswith(";setcounting"):
-        
-        if message.author.server_permissions.manage_channels: 
-            cchannel = message.channel
-            await bot.send_message(message.channel, "The counting channel is now set to " + str(message.channel) + "! The current number is " + str(count) + ".")
-            await bot.delete_message(message)
-            return
-        else: 
-            await bot.send_message(message.channel, "Sorry, you do not have permission to use that command!")
-
-    if message.content.startswith(";editnum "): 
-        
-        if message.author.server_permissions.manage_channels: 
-            try: 
-                count = int(message.content[9:])
-                await bot.send_message(message.channel, "The new number to count from is " + str(count) + "!")
-                await bot.delete_message(message)
-
-            except: 
-                await bot.delete_message(message)
-                await bot.send_message(message.channel, "That is not a number!")
-
-            return   
-        else: 
-            await bot.send_message(message.channel, "Sorry, you do not have permission to use that command!")
-
-    if message.channel == cchannel:
-        
-        if message.author == pcounter: 
-
-            await bot.delete_message(message)
-            await bot.send_message(message.channel, "Sorry, but you have to wait for someone else to type <@" + str(message.author.id) + ">!")
-
-        else:
-            
-            if len(message.content) == len(str(count)):
-                
-                if message.content == str(count):
-                    
-                    count = count + 1
-                    pcounter = message.author
-                else: 
-                    await bot.delete_message(message) 
-                    await bot.send_message(message.channel, "Wrong! <@" + str(message.author.id) + ">, please type " + str(count) + "!")
-
-            else:      
-
-                if message.content.startswith(str(count) + " "):
-                    count = count + 1
-                    pcounter = message.author
-                else: 
-                    await bot.delete_message(message) 
-                    await bot.send_message(message.channel, "Wrong! <@" + str(message.author.id) + ">, please type " + str(count) + "!")
-        return
-
-
-    if msg.startswith(";help"): 
+     if msg.startswith(";help"): 
         embed = discord.Embed(title="Help", description="[Required] (Optional)", color=0x00ff00)
         embed.set_thumbnail(url=bot.user.avatar_url)
 
@@ -141,8 +83,6 @@ async def on_message(message):
         embed.add_field(name=";mute [Mention (Reason)", value="Mutes the mentioned user.", inline=False)
         embed.add_field(name=";unmute [Mention]", value="Unmutes the mentioned user.", inline=False)
         embed.add_field(name=";say [Message]", value="Bot repeats the message.", inline=False)
-        embed.add_field(name=";setcounting", value="Makes the current channel a channel for counting.", inline=False)
-        embed.add_field(name=";editnum [Number]", value="Edits the current number to count.", inline=False)
         embed.add_field(name=";cooldown [Number]", value="Edits the cooldown for certain commands.", inline=False)
         embed.add_field(name=";game [Name]", value="Changed the name of the game LimeBot is playing.\n", inline=False)
         embed.add_field(name=";setstreamtime [Time]", value="Changes the streamtime, turns it off if set to false.")
@@ -673,6 +613,10 @@ async def on_message(message):
                 bl.remove(message.mentions[0].id)
             except: 
                 await bot.send_message(message.channel, "Lime, you're being a dummy!")    
+                
+    if msg.startswith(";editlast "): 
+        if message.author.server_permissions.kick_members:
+            await bot.edit_message(botmsg, msg[9:]) 
 
         
 
