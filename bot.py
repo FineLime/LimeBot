@@ -71,8 +71,8 @@ async def on_message(message):
         return
 
     msg = message.content.lower()
-
-     if msg.startswith(";help"): 
+    
+    if msg.startswith(";help"): 
         embed = discord.Embed(title="Help", description="[Required] (Optional)", color=0x00ff00)
         embed.set_thumbnail(url=bot.user.avatar_url)
 
