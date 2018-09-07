@@ -63,7 +63,7 @@ async def on_message(message):
     global botmsg
 
     if message.author.bot: 
-        if msg.author.id == bot.user.id:
+        if message.author.id == bot.user.id:
             botmsg = message
         return
 
