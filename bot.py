@@ -625,9 +625,9 @@ async def on_message(message):
         if random.randint(1, 7) == 6: 
             await bot.send_message(message.channel, ":gun: Bang!... Oh no, it was the bullet, i'll revive you but it will take 5 minutes.")
             mutedrole = get(message.server.roles, name = "Muted")
-            await bot.add_role(message.author, mutedrole)
+            await bot.add_roles(message.author, mutedrole)
             await asyncio.sleep(300)
-            await bot.remove_role(message.author, mutedrole)
+            await bot.remove_roles(message.author, mutedrole)
         else:
             await bot.send_message(message.channel, ":gun: Bang!... :sweat_smile: glad to see you're still alive!")
             
