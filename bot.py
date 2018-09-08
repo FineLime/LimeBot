@@ -620,6 +620,17 @@ async def on_message(message):
             await bot.delete_message(message)
         else: 
             await bot.send_message(message.channel, "Sorry, you do not have permission to use that command!")
+            
+    if msg.startswith(";rr"): 
+        if random.int(1, 6) == 6: 
+            await bot.send_message(message.channel, ":gun: Bang!... Oh no, it was the bullet, i'll revive you but it will take 5 minutes.")
+            mutedrole = get(message.server.roles, name = "Muted")
+            await bot.add_role(message.author, mutedrole)
+            await asyncio.sleep(300)
+            await bot.remove_role(message.author, mutedrole)
+        else:
+            await bot.send_message(message.channel, ":gun: Bang!... :sweat_smile: glad to see you're still alive!")
+            
 
         
 
