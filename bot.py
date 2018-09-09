@@ -633,9 +633,9 @@ async def on_message(message):
                 await bot.send_message(message.channel, "<@" + message.author.id + "> has been revived! :D")
             else:
                 await bot.send_message(message.channel, ":gun: Bang!... :sweat_smile: glad to see you're still alive!")
-            cooldown.append(message.author.id)
+            cooldown_rr.append(message.author.id)
             await asyncio.sleep(cooldown)
-            cooldown.remove(message.author.id)
+            cooldown_rr.remove(message.author.id)
          
             
 
