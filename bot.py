@@ -31,7 +31,7 @@ botmsg = False
 
 modRole = False
 
-streamTime = "18:00"
+streamTime = "19:00"
 isStreaming = False
 endStream = False
 
