@@ -25,6 +25,7 @@ cooldown_avatar = []
 cooldown_live = []
 cooldown_rps = []
 cooldown_rr = []
+cooldown_love = []
 cooldown = 20
 
 botmsg = False
@@ -636,6 +637,28 @@ async def on_message(message):
             cooldown_rr.append(message.author.id)
             await asyncio.sleep(cooldown)
             cooldown_rr.remove(message.author.id)
+            
+    if msg.startswith(";love "):
+        if message.author.id not in cooldown_love:
+            msgg = message.content.split(" ")
+            msgl = len(msgg)-1
+            msgs = ""
+            for i in msgl-1: 
+                if i = len(msgg)-1: 
+                    msgs += " and "
+                elif i > 0: 
+                    msgs += ", "
+                msgs += msgg[i+1] 
+            
+            msgs += " sitting in a tree, \nK.I.S.S.I.N.G."
+            await bot.send_message(message.channel, msgs)
+            cooldown_love.append(message.author.id)
+            await asyncio.sleep(cooldown)
+            cooldown_love.remove(message.author.id)
+            
+            
+       
+    
          
             
 
