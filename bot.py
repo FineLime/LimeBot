@@ -644,7 +644,7 @@ async def on_message(message):
             msgl = len(msgg)-1
             msgs = ""
             i = 0;
-            while i < msgl-1: 
+            while i < msgl: 
                 if i == len(msgg)-1: 
                     msgs += " and "
                 elif i > 0: 
