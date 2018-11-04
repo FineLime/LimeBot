@@ -643,7 +643,7 @@ async def on_message(message):
             msgg = message.content.split(" ")
             msgl = len(msgg)-1
             msgs = ""
-            for i in msgl-1: 
+            for i < msgl-1: 
                 if i == len(msgg)-1: 
                     msgs += " and "
                 elif i > 0: 
