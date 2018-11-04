@@ -642,21 +642,27 @@ async def on_message(message):
         if message.author.id not in cooldown_love:
             msgg = message.content.split(" ")
             msgl = len(msgg)-1
-            msgs = ""
-            i = 0;
-            while i < msgl: 
-                if i == msgl-1: 
-                    msgs += " and "
-                elif i > 0: 
-                    msgs += ", "
-                msgs += msgg[i+1] 
-                i += 1
-            
-            msgs += " sitting in a tree, \nK.I.S.S.I.N.G."
-            await bot.send_message(message.channel, msgs)
-            cooldown_love.append(message.author.id)
-            await asyncio.sleep(cooldown)
-            cooldown_love.remove(message.author.id)
+            if msgl = 2:
+                await bot.send_message(message.channel, msgg[1] + " kisses themselves while sitting in a tree.)
+                cooldown_love.append(message.author.id)
+                await asyncio.sleep(cooldown)
+                cooldown_love.remove(message.author.id)
+            else:
+                msgs = ""
+                i = 0;
+                while i < msgl: 
+                    if i == msgl-1: 
+                        msgs += " and "
+                    elif i > 0: 
+                        msgs += ", "
+                    msgs += msgg[i+1] 
+                    i += 1
+
+                msgs += " sitting in a tree, \nK.I.S.S.I.N.G."
+                await bot.send_message(message.channel, msgs)
+                cooldown_love.append(message.author.id)
+                await asyncio.sleep(cooldown)
+                cooldown_love.remove(message.author.id)
             
             
        
