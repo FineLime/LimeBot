@@ -643,12 +643,14 @@ async def on_message(message):
             msgg = message.content.split(" ")
             msgl = len(msgg)-1
             msgs = ""
-            for i < msgl-1: 
+            var i = 0;
+            while i < msgl-1: 
                 if i == len(msgg)-1: 
                     msgs += " and "
                 elif i > 0: 
                     msgs += ", "
                 msgs += msgg[i+1] 
+                i += 1
             
             msgs += " sitting in a tree, \nK.I.S.S.I.N.G."
             await bot.send_message(message.channel, msgs)
