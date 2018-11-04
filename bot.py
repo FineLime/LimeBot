@@ -643,7 +643,7 @@ async def on_message(message):
             msgg = message.content.split(" ")
             msgl = len(msgg)-1
             if msgl == 2:
-                await bot.send_message(message.channel, msgg[1] + " kisses themselves while sitting in a tree.)
+                await bot.send_message(message.channel, msgg[1] + " kisses themselves while sitting in a tree.")
                 cooldown_love.append(message.author.id)
                 await asyncio.sleep(cooldown)
                 cooldown_love.remove(message.author.id)
