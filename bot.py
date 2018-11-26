@@ -667,7 +667,7 @@ async def on_message(message):
     if msg.startswith(";paploomad"):
         if msg.author.server_permissions.kick_members:
             embed = discord.Embed(title="Paploo Rage! :rage:", color=0x00ff00)
-            embed.set_image(url=random.choice(["https://gyazo.com/6077593d7e87b5e1cc2dfe619f614a30", "https://gyazo.com/2dce76190450dbbe00925bc339272448"])
+            embed.set_image(url="https://gyazo.com/2dce76190450dbbe00925bc339272448")
             await bot.send_message(message.channel, embed=embed)
             
             
