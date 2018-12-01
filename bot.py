@@ -26,6 +26,7 @@ cooldown_live = []
 cooldown_rps = []
 cooldown_rr = []
 cooldown_love = []
+cooldown_choose = []
 cooldown = 20
 
 botmsg = False
@@ -669,6 +670,15 @@ async def on_message(message):
             embed = discord.Embed(title="Paploo Rage! :rage:", color=0x00ff00)
             embed.set_image(url=random.choice(["https://media.giphy.com/media/ORE056VJAdXwMbdvzG/giphy.gif", "https://media.giphy.com/media/5SwdiFOisabn4wwhW3/giphy.gif"]))
             await bot.send_message(message.channel, embed=embed)
+      
+    if msg.startswith(";choose "):
+        if message.author.id not in cooldown_choose:
+            choices = msg[8:]
+            choices = choices.split("|")
+            await bot.send_message(message.channel, random.choice(choices))
+            cooldown_choose.append(message.author.id)
+            await asyncio.sleep(cooldown)
+            cooldown_choose.remove(message.author.id)
             
             
        
