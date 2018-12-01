@@ -673,7 +673,7 @@ async def on_message(message):
       
     if msg.startswith(";choose "):
         if message.author.id not in cooldown_choose:
-            choices = msg[8:]
+            choices = message.content[8:]
             choices = choices.split("|")
             await bot.send_message(message.channel, random.choice(choices))
             cooldown_choose.append(message.author.id)
