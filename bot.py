@@ -675,7 +675,7 @@ async def on_message(message):
         if message.author.id not in cooldown_choose:
             choices = message.content[8:]
             choices = choices.split("|")
-            await bot.send_message(message.channel, "I choose: " + random.choice(choices))
+            await bot.send_message(message.channel, "I choose: `" + random.choice(choices) + "`")
             cooldown_choose.append(message.author.id)
             await asyncio.sleep(cooldown)
             cooldown_choose.remove(message.author.id)
