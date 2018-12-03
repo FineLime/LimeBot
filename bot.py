@@ -681,26 +681,7 @@ async def on_message(message):
             cooldown_choose.remove(message.author.id)
             
            
-       
-@bot.event
-async def on_message_delete(message):
-    logschannel = get(message.server.channels, name="logs-spam")
-    pic = False
-    embed = discord.Embed(title="Deleted Message" , color=0x00ff00)
-    embed.add_field(name="<@" + message.author.id + ">", value=message.content, inline = False)
-    if len(message.attachments) > 0: 
-        pic_ext = ["jpg", "jpeg", "gif", "png", "tiff", "bmp"]
-        for ext in pic_ext:
-            if str(message.attachments[0])[:-2].endswith(ext):
-                pic = True
-        if pic == False: 
-            embed.add_field(name="Attachment")
-        else:
-            embed.add_field(name="Attachment")
-            embed.set_image(url=message.attachments.url)
-    
-    await bot.send_message(logschannel, embed=embed)
-        
+
             
        
     
