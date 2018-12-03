@@ -689,10 +689,10 @@ async def on_message_delete(message):
     embed = discord.Embed(title="Deleted Message" , color=0x00ff00)
     embed.add_field(name="@" + message.author.id, value=message.content, inline = False)
     if message.attachments.length > 0: 
-       pic_ext = ["jpg", "jpeg", "gif", "png", "tiff", "bmp"]
-       for ext in pic_ext:
-        if message.attachments.url.endswith(ext):
-            pic = True
+        pic_ext = ["jpg", "jpeg", "gif", "png", "tiff", "bmp"]
+        for ext in pic_ext:
+            if message.attachments.url.endswith(ext):
+                pic = True
         if pic == False: 
             embed.add_field(name="Attachment" value="Link: " + message.attachments.url, inline = False)
         else:
