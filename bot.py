@@ -687,11 +687,11 @@ async def on_message_delete(message):
     logschannel = get(message.server.channels, name="logs-spam")
     pic = False
     embed = discord.Embed(title="Deleted Message" , color=0x00ff00)
-    embed.add_field(name="@" + message.author.name + "#" + message.author.discriminator, value=message.content, inline = False)
+    embed.add_field(name="<@" + message.author.id + ">", value=message.content, inline = False)
     if len(message.attachments) > 0: 
         pic_ext = ["jpg", "jpeg", "gif", "png", "tiff", "bmp"]
         for ext in pic_ext:
-            if message.attachments.url.endswith(ext):
+            if message.attachments.url[0].endswith(ext):
                 pic = True
         if pic == False: 
             embed.add_field(name="Attachment")
