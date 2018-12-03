@@ -694,7 +694,7 @@ async def on_message_delete(message):
             if message.attachments.url.endswith(ext):
                 pic = True
         if pic == False: 
-            embed.add_field(name="Attachment" value="Link: " + message.attachments.url, inline = False)
+            embed.add_field(name="Attachment")
         else:
             embed.add_field(name="Attachment")
             embed.set_image(url=message.attachments.url)
