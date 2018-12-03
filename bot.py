@@ -680,6 +680,26 @@ async def on_message(message):
             await asyncio.sleep(cooldown)
             cooldown_choose.remove(message.author.id)
             
+           
+       
+@bot.event
+async def on_message_delete(message):
+    logschannel = get(message.server.channels, name="logs-spam")
+    pic = False
+    embed = discord.Embed(title="Deleted Message" , color=0x00ff00)
+    embed.add_field(name="@" + message.author.id, value="message.content", inline = False)
+    if message.attachments.length > 0: 
+       pic_ext = ["jpg", "jpeg", "gif", "png", "tiff", "bmp"]
+       for ext in pic_ext:
+        if message.attachments.url.endswith(ext):
+            pic = True
+        if pic == False: 
+            embed.add_field(name="Attachment" value=message.attachments.url)
+        else:
+            embed.set_image(url=message.attachments.url)
+    
+    await bot.send_message(logschannel, embed=embed)
+        
             
        
     
