@@ -27,6 +27,7 @@ cooldown_rps = []
 cooldown_rr = []
 cooldown_love = []
 cooldown_choose = []
+cooldown_lovetest = []
 cooldown = 20
 
 botmsg = False
@@ -679,7 +680,28 @@ async def on_message(message):
             cooldown_choose.append(message.author.id)
             await asyncio.sleep(cooldown)
             cooldown_choose.remove(message.author.id)
-            
+      
+    if msg.startswith(";lovetest "):
+        if message.author.id not in cooldown_lovetest:
+            try:
+                user1 = message.mentions[0]
+                user2 = message.mentions[1]
+            except:
+                await bot.send_message(message.channel, "Make sure to tag 2 people (And hope they dont get mad)")
+             
+            user1id = int(user1.id[:3])
+            user2id = int(user2.id[:3])
+            userlove = 0
+            if user1id > user2id: 
+                userlove = str(user2id*(100/user1id))
+            else:
+                userlove = str(user1id*(100/user2id))
+             
+            if len(userlove) > 5: 
+                userlove = userlove[5:]
+              
+            await bot.send_message(message.channel, "The love percentage between <@" + user1.id + "> and <@" + user2.id + "> is " + userlove + "%")
+         
            
 
             
