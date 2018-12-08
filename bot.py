@@ -689,8 +689,8 @@ async def on_message(message):
             except:
                 await bot.send_message(message.channel, "Make sure to tag 2 people (And hope they dont get mad)")
              
-            user1id = int(user1.id[:-3])
-            user2id = int(user2.id[:-3])
+            user1id = int(user1.id[-3:])
+            user2id = int(user2.id[-3:])
             userlove = 0
             if user1id > user2id: 
                 userlove = str(user2id*(100/user1id))
