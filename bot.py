@@ -700,7 +700,7 @@ async def on_message(message):
             if len(userlove) > 5: 
                 userlove = userlove[:5]
               
-            await bot.send_message(message.channel, "The love percentage between <@" + user1.id + "> and <@" + user2.id + "> is " + userlove + "%")
+            await bot.send_message(message.channel, "The love percentage between ***" + user1.name + "*** and ***" + user2.name + "*** is " + userlove + "%")
             cooldown_lovetest.append(message.author.id)
             await asyncio.sleep(cooldown)
             cooldown_lovetest.remove(message.author.id)
