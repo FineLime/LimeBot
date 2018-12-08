@@ -693,8 +693,8 @@ async def on_message(message):
                     user1 = get(message.server.members id=msgb[1])
                     user2 = get(message.server.members id=msgb[2])
                 except:
-                    user1 = get(message.server.members, name=msgb[1])
-                    user2 = get(message.server.members, name=msgb[2])
+                    user1 = get(message.server.members, name.lower()=msgb[1].lower())
+                    user2 = get(message.server.members, name.lower()=msgb[2].lower())
              
             user1id = int(user1.id[-3:])
             user2id = int(user2.id[-3:])
