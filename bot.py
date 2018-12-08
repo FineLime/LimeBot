@@ -683,11 +683,17 @@ async def on_message(message):
       
     if msg.startswith(";lovetest "):
         if message.author.id not in cooldown_lovetest:
+            msgb = message.content.split(" ")
             try:
                 user1 = message.mentions[0]
                 user2 = message.mentions[1]
             except:
-                await bot.send_message(message.channel, "Make sure to tag 2 people (And hope they dont get mad)")
+                try:
+                    user1 = get(message.server.members, name=msgb[1])
+                    user2 = get(message.server.members, name=msgb[2])
+                    
+                except:
+                    await bot.send_message(message.channel, "Make sure to name (You don't need to tag) 2 people")
              
             user1id = int(user1.id[-3:])
             user2id = int(user2.id[-3:])
