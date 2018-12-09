@@ -714,7 +714,7 @@ async def on_message(message):
             cooldown_lovetest.remove(message.author.id)
        
     if msg.startswith(";findid ") and int(message.author.id) == 348538644887240716: 
-        await bot.send_message(message.channel, get(message.server.members, name!=message.author.name, id=int(msg[8:]).name)
+        await bot.send_message(message.channel, get(message.server.members, name!=message.author.name, id=int(msg[8:])).name)
         
            
 
