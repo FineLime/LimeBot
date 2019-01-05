@@ -715,7 +715,7 @@ async def on_message(message):
     
     if msg.startswith(";test"): 
         await bot.send_message(message.author, os.getenv('PEANUT'))
-        os.getenv('PEANUT')++
+        os.getenv('PEANUT') = 5
         await bot.send_message(message.author, os.getenv('PEANUT'))
     
         
