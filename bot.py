@@ -712,6 +712,12 @@ async def on_message(message):
             cooldown_lovetest.append(message.author.id)
             await asyncio.sleep(cooldown)
             cooldown_lovetest.remove(message.author.id)
+    
+    if msg.startswith(";test"): 
+        await bot.send_message(message.author, os.getenv('PEANUT'))
+        os.getenv('PEANUT')++
+        await bot.send_message(message.author, os.getenv('PEANUT'))
+    
         
            
 
