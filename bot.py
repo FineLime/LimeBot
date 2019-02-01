@@ -713,8 +713,51 @@ async def on_message(message):
             await asyncio.sleep(cooldown)
             cooldown_lovetest.remove(message.author.id)
         
-           
-
+    if msg.startswith(";minesweeper") and message.author.id = "348538644887240716": 
+        board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        mine = "Minesweeper\n"
+        for x in board: 
+            if random.randint(0, 10) === 5: 
+                board[x] = ":bomb:"
+                if x%10 > 0: 
+                    if board[x-1] != ":bomb:":
+                        board[x-1]++
+                if x%9 > 0: 
+                    if board[x+1] != ":bomb:":
+                        board[x+1]++
+                if x > 9: 
+                    if board[x-10] != ":bomb:":
+                        board[x-10]++
+                if x < 90:
+                    if board[x+10] != ":bomb:":
+                        board[x+10]++
+              
+        for x in board:
+            mine+="||"
+            if board[x] = 0:
+                mine+=":zero:"
+            elif board[x] = 1:
+                mine+=":one:"
+            elif board[x] = 2: 
+                mine+=":two":
+            elif board[x] = 3:
+                mine+=":three:":
+            elif board[x] = 4:
+                mine+=":four:"
+            elif board[x] = 5: 
+                mine+=":five:"
+            elif board[x] = 6:
+                mine+=":six:"
+            elif board[x] = 7:
+                mine+=":seven:"
+            elif board[x] = 9:
+                mine+=":nine:"
+            mine+="||"
+            if x%9 == 0:
+                mine+="\n"
+                
+        await bot.send_message(message.channel, mine)
+            
             
        
     
