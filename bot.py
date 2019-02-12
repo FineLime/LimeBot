@@ -715,7 +715,7 @@ async def on_message(message):
         
     if msg.startswith(";eval "): 
         
-        if str(message.author.id) == "348538644887240716"):
+        if str(message.author.id) == "348538644887240716":
             try:
                 eval(message.content[6:])
             except:
