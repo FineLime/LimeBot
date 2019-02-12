@@ -713,7 +713,7 @@ async def on_message(message):
             await asyncio.sleep(cooldown)
             cooldown_lovetest.remove(message.author.id)
         
-    if msg.startswith(";eval ") { 
+    if msg.startswith(";eval "):
         
         if str(message.author.id) == "348538644887240716":
             try: 
