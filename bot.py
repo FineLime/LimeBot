@@ -717,6 +717,7 @@ async def on_message(message):
         
         if str(message.author.id) == "348538644887240716":
             try: 
+                print(message.content[6:])
                 eval(message.content[6:])
             except:
                 await bot.send_message(message.channel, "Unable to run the code!")
