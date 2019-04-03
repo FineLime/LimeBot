@@ -724,7 +724,6 @@ async def on_message(message):
 @bot.event           
 async def on_reaction_add(reaction, user):
     print(reaction.emoji)
-    print(str(reaction.emoji))
        
     
          
