@@ -726,7 +726,7 @@ async def on_reaction_add(reaction, user):
     if str(reaction.message.id) == "562954494078353408":
         pass
         #await bot.add_roles(user, get(reaction.message.server.roles, name="")
-    print(str(reaction.emoji))
+    print(reaction.emoji)
        
     
          
