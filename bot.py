@@ -722,11 +722,9 @@ async def on_message(message):
                 await bot.send_message(message.channel, "Unable to run the code.")
        
 @bot.event           
-async def on_reaction_add(reaction, user): 
-    if str(reaction.message.id) == "562954494078353408":
-        pass
-        #await bot.add_roles(user, get(reaction.message.server.roles, name="")
+async def on_reaction_add(reaction, user):
     print(reaction.emoji)
+    print(str(reaction.emoji))
        
     
          
