@@ -723,6 +723,8 @@ async def on_message(message):
        
 @bot.event           
 async def on_reaction_add(reaction, user): 
+    if reaction.emoji == "🎉": 
+        await bot.send_message(reaction.message.channel, "Party!!!! 🎉🎉🎉")
     print(reaction.emoji)
     await bot.send_message(reaction.message.channel, str(reaction.message.id) + " | " + str(reaction.emoji))
        
