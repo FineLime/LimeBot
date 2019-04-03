@@ -721,13 +721,26 @@ async def on_message(message):
             except:
                 await bot.send_message(message.channel, "Unable to run the code.")
        
-@bot.event           
-async def on_reaction_add(reaction, user): 
+#@bot.event           
+#async def on_reaction_add(reaction, user): 
+    
     #Heroku
-    Role_1 = get(reaction.message.server.roles, id="350314217879896066")
-    if reaction.emoji == "1⃣": 
-        await bot.add_roles(user, Role_1)
-    print(str(reaction.emoji))
+    #Role_1 = get(reaction.message.server.roles, id="350314217879896066")
+    #Role_2 = get(reaction.message.server.roles, id="423253740246794241")
+    #Role_3 = get(reaction.message.server.roles, id="310784232093908992")
+    #Role_4 = get(reaction.message.server.roles, id="316977167298985985")
+    #Role_5 = get(reaction.message.server.roles, id="545737840697278464")
+    #if reaction.emoji == "1⃣": 
+    #    await bot.add_roles(user, Role_1)
+    #elif reaction.emoji == "2⃣":
+    #    await bot.add_roles(user, Role_2)
+    #elif reaction.emoji == "3⃣": 
+    #    await bot.add_roles(user, Role_3)
+    #elif reaction.emoji == "4⃣": 
+    #    await bot.add_roles(user, Role_4)
+    #elif reaction.emoji == "5⃣":
+    #    await bot.add_roles(user, Role_5)
+    #print(str(reaction.emoji))
        
     
          
