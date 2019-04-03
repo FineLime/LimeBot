@@ -725,7 +725,7 @@ async def on_message(message):
 async def on_reaction_add(reaction, user): 
     #Heroku please
     if reaction.message.id == "562960092941516801": 
-        if str(reaction.emoji) == "1⃣": 
+        if str(reaction.emoji) == "1️⃣": 
             await bot.send_message(reaction.message.channel, "mhm")
     print(str(reaction.emoji))
     await bot.send_message(reaction.message.channel, str(reaction.message.id) + " | " + str(reaction.emoji))
