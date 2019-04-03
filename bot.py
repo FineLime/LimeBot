@@ -724,11 +724,9 @@ async def on_message(message):
 @bot.event           
 async def on_reaction_add(reaction, user): 
     if str(reaction.message.id) == "562954494078353408":
+        pass
         #await bot.add_roles(user, get(reaction.message.server.roles, name="")
-        if str(reaction.emoji) == "1⃣": 
-            await bot.add_roles(user, get(reaction.message.server.roles, name="Rainbow Six Siege Players"))
     print(str(reaction.emoji))
-    await bot.send_message(reaction.message.channel, str(reaction.message.id) + " | " + str(reaction.emoji))
        
     
          
