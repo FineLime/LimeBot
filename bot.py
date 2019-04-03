@@ -723,8 +723,7 @@ async def on_message(message):
        
             
 async def on_reaction_add(reaction, user): 
-    if str(reaction.message.id) == "348538644887240716":
-        print(reaction)
+    print(reaction.message.id)
        
     
          
