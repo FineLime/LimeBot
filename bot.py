@@ -723,7 +723,7 @@ async def on_message(message):
        
 @bot.event           
 async def on_reaction_add(reaction, user): 
-    #Heroku please
+    #Heroku
     if reaction.emoji == "1️⃣": 
         await bot.add_roles(user, get(reaction.message.server.roles, name="Rainbow Six Siege Players")
     print(str(reaction.emoji))
