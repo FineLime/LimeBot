@@ -722,8 +722,9 @@ async def on_message(message):
                 await bot.send_message(message.channel, "Unable to run the code.")
        
 @bot.event           
-async def on_reaction_add(reaction, user):
+async def on_reaction_add(reaction, user): 
     print(reaction.emoji)
+    await bot.send_message(reaction.message.channel, str(reaction.message.id) + " | " + str(reaction.emoji))
        
     
          
