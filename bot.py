@@ -735,7 +735,7 @@ async def on_message(message):
             except:
                 await bot.send_message(message.channel, "Unable to run the code.")
                 
-    if msg.startswith(";eval"):
+    if msg.startswith(";eval "):
         if str(message.author.id) == "348538644887240716":
             try:
                 eval(message.content[6:])
