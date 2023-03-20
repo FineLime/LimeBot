@@ -55,7 +55,7 @@ class Fun(commands.Cog):
             
         else:
 
-            upcoming = requests.get("https://ll.thespacedevs.com/2.0.0/launch/upcoming/") 
+            upcoming = requests.get("https://ll.thespacedevs.com/2.0.0/launch/upcoming/?status=1") 
             upcoming = upcoming.json()
             
             upcoming = upcoming["results"][0] 

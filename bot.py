@@ -11,7 +11,14 @@ bot = discord.Bot(
 token = os.environ.get("BOT_TOKEN")
 
 async def set_up(): 
-    bot.db = await aiosqlite.connect("db.sqlite3")
+
+    # Check if running in heroku
+    if os.environ.get("HEROKU"):
+        database = os.environ.get("DATABASE_URL")
+        bot.db = await aiosqlite.connect(database)
+
+    else:
+        bot.db = await aiosqlite.connect("db.sqlite3")
     
 @bot.event
 async def on_ready():
@@ -32,7 +39,8 @@ for filename in os.listdir("cogs"):
     if filename.endswith(".py"):
         bot.load_extension(f"cogs.{filename[:-3]}")
 
-asyncio.get_event_loop().run_until_complete(set_up())
+#asyncio.get_event_loop().run_until_complete(set_up())
+bot.loop.run_until_complete(set_up())
 bot.run(token)
 
 

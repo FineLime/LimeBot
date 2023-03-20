@@ -1,6 +1,7 @@
 import discord 
 from discord.ext import commands
 import math
+from datetime import datetime
 
 class pollView(discord.ui.View):
 
@@ -20,6 +21,9 @@ class pollView(discord.ui.View):
         await interaction.message.edit(view=None, embed=discord.Embed(title=self.message.embeds[0].title, description=f"{self.message.embeds[0].description} \n\n**Poll Ended**", color=discord.Color.blurple()))
         self.stop()
 
+    async def on_timeout(self):
+        await self.message.edit(view=None, embed=discord.Embed(title=self.message.embeds[0].title, description=f"{self.message.embeds[0].description} \n\n**Poll Ended**", color=discord.Color.blurple()))
+
 
 class pollButton(discord.ui.Button):
     def __init__(self, label, row): 
@@ -34,7 +38,7 @@ class pollButton(discord.ui.Button):
         self.view.voters.append(interaction.user.id)
         await interaction.response.send_message(f"You have voted for {self.label}.", ephemeral=True)
 
-        description = self.view.message.embeds[0].description.split("\n")
+        description = interaction.message.embeds[0].description.split("\n")
         for i, line in enumerate(description):
             if line.split(".")[1].split("(")[0].strip() == self.label:
                 description[i] = f"{i+1}. {self.label} ({int(line.split('(')[1].split(')')[0])+1})"
@@ -50,20 +54,21 @@ class Poll(commands.Cog):
         self.bot = bot
 
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
-    async def poll(self, ctx, question: str, hours: int, option: str):
+    async def poll(self, ctx, question: str, hours: int, option1:str, option2:str, option3:str=None, option4:str=None, option5:str=None, option6:str=None, option7:str=None, option8:str=None, option9:str=None, option10:str=None):
 
-        options = option.split(" | ")
-        if len(options) > 10:
-            return await ctx.send("You can only have up to 10 options.")
+        options = [option1, option2, option3, option4, option5, option6, option7, option8, option9, option10]
+
         if len(options) < 2:
             return await ctx.send("You need at least 2 options.")
         
         view = pollView(timeout=hours) 
         for i, option in enumerate(options):
-            view.add_item(pollButton(option, math.floor(i/5)))
+            if option is not None:
+                view.add_item(pollButton(option, math.floor(i/5)))
         
         embed = discord.Embed(title=question, color=discord.Color.blurple())
         embed.description = "\n".join([f"{i+1}. {option} (0)" for i, option in enumerate(options)])
+        embed.description += f"\n\n**Poll will end in <t:{int((ctx.message.created_at+datetime.timedelta(hours=hours)).timestamp())}:R>**"
 
         await ctx.respond(embed=embed, view=view)
         

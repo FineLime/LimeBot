@@ -9,8 +9,9 @@ class Moderation(commands.Cog):
     @has_permissions(manage_messages=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def purge(self, ctx, amount: int):
+        await ctx.respond(f"Purging {amount} messages...", ephemeral=True)
         await ctx.channel.purge(limit=amount)
-        await ctx.respond(f"Deleted {amount} messages.")
+
 
     @has_permissions(manage_messages=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])

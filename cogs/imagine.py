@@ -7,6 +7,7 @@ from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 import aiohttp
+from stuff.patreon_only import tangerine_only
 
 class Imagine(commands.Cog):
 
@@ -20,6 +21,7 @@ class Imagine(commands.Cog):
             engine='stable-diffusion-v1-5'
         )
 
+    @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def imagine(self, ctx, prompt: str):
 
@@ -41,6 +43,12 @@ class Imagine(commands.Cog):
                     files.append(discord.File(image_bytes, filename='image.png'))
             
         await ctx.followup.send(f"**{prompt}**", files=files)
+
+    @imagine.error
+    async def imagine_error(self, ctx, error):
+        
+        if error.__class__.__name__ == "CheckFailure":
+            await ctx.respond("This command is only available to Tangerine Patrons.\nYou can become a patron at https://www.patreon.com/FineLime\n\nIf you are a patron, please make sure you have linked your Discord account to your Patreon account and have waited at least 5 minutes for the cache to update.", ephemeral=True)
 
 
                     
