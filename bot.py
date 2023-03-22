@@ -18,7 +18,7 @@ async def set_up():
     # Check if running in heroku
     if os.environ.get("HEROKU"):
         database = os.environ.get("DATABASE_URL")
-        bot.db = await aiosqlite.connect(database)
+        bot.db = await asyncpg.create_pool(database, ssl="require")
 
     else:
         bot.db = await asyncpg.create_pool(database="postgres", user="postgres", password=db_pass, host="localhost", port=5432)
