@@ -47,8 +47,6 @@ class BlackjackView(discord.ui.View):
             description += f"Dealer Cards:\n{' '.join(self.dealer['cards'])} ({self.dealer['value']})\n\n"
             description += f"Your Cards:\n{' '.join(self.player['cards'])} ({self.player['value']})\n\n"
             description += "You busted!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
             await interaction.response.edit_message(embed=discord.Embed(title=f"{interaction.user.name}'s Blackjack", description=description, color=discord.Color.blurple()), view=None)
             return
@@ -74,22 +72,16 @@ class BlackjackView(discord.ui.View):
         if self.dealer['value'] > 21:
 
             description += "Dealer busted!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
 
         elif self.dealer['value'] > self.player['value']:
 
             description += "Dealer won!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
 
         elif self.dealer['value'] < self.player['value']:
 
             description += "You won!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
 
         else:
@@ -114,8 +106,6 @@ class BlackjackView(discord.ui.View):
             description += f"Dealer Cards:\n{' '.join(self.dealer['cards'])} ({self.dealer['value']})\n\n"
             description += f"Your Cards:\n{' '.join(self.player['cards'])} ({self.player['value']})\n\n"
             description += "You busted!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
             await interaction.response.edit_message(embed=discord.Embed(title=f"{interaction.user.name}'s Blackjack", description=description, color=discord.Color.blurple()), view=None)
             return
@@ -131,22 +121,16 @@ class BlackjackView(discord.ui.View):
         if self.dealer['value'] > 21:
 
             description += "Dealer busted!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
         
         elif self.dealer['value'] > self.player['value']:
 
             description += "Dealer won!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
 
         elif self.dealer['value'] < self.player['value']:
 
             description += "You won!"
-            # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + ? WHERE member_id = ? and guild_id = ?", (self.bet, interaction.user.id, interaction.guild.id)) as cursor:
-            #     await cursor.fetchone()
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
 
         else:
@@ -178,8 +162,6 @@ class Blackjack(commands.Cog):
             await ctx.respond("You can't bet a negative amount of coins.")
             return
         
-        # async with self.bot.db.execute("SELECT coins FROM controlpanel_member WHERE member_id = ? and guild_id = ?", (ctx.author.id, ctx.guild.id)) as cursor:
-        #     result = await cursor.fetchone()
         result = await self.bot.db.fetchrow("SELECT coins FROM controlpanel_member WHERE member_id = $1 and guild_id = $2", ctx.author.id, ctx.guild.id)
 
         if not result:
@@ -252,8 +234,6 @@ class Blackjack(commands.Cog):
             description += "Dealer has a natural blackjack!\n"
             if bet > 0:
                 description += f"You lose your bet ({bet} coins)"
-                # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - ? WHERE member_id = ? and guild_id = ?", (bet, ctx.author.id, ctx.guild.id)) as cursor:
-                #     await self.bot.db.commit()
                 await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins - $1 WHERE member_id = $2 and guild_id = $3", bet, ctx.author.id, ctx.guild.id)
 
             embed.description = description
@@ -267,8 +247,6 @@ class Blackjack(commands.Cog):
             description += "You have a natural blackjack!\n"
             if bet > 0:
                 description += f"You win {math.floor(bet * 2.5)} coins"
-                # async with self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + ? WHERE member_id = ? and guild_id = ?", (math.floor(bet * 2.5), ctx.author.id, ctx.guild.id)) as cursor:
-                #     await self.bot.db.commit()
                 await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + $1 WHERE member_id = $2 and guild_id = $3", math.floor(bet * 2.5), ctx.author.id, ctx.guild.id)
 
             embed.description = description
