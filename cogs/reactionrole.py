@@ -11,8 +11,7 @@ class Reaction(commands.Cog):
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def add_reaction_role(self, ctx, message: discord.Message, role: discord.Role, emoji: str):
 
-        async with self.bot.db.execute("SELECT role_id, emoji FROM controlpanel_reactionrole WHERE message_id = ?", (message.id,)) as cursor:
-            data = await cursor.fetchall()
+        data = await self.bot.db.fetch("SELECT role_id, emoji FROM controlpanel_reactionrole WHERE message_id = $1", message.id)
 
         if not data:
             try: 
@@ -20,8 +19,8 @@ class Reaction(commands.Cog):
             except:
                 await ctx.respond("Invalid emoji.", ephemeral=True)
                 return
-            async with self.bot.db.execute("INSERT INTO controlpanel_reactionrole (guild_id, message_id, role_id, emoji) VALUES (?, ?, ?, ?)", (ctx.guild.id, message.id, role.id, str(emoji))) as cursor:
-                await self.bot.db.commit()
+            
+            await self.bot.db.execute("INSERT INTO controlpanel_reactionrole (guild_id, message_id, role_id, emoji) VALUES ($1, $2, $3, $4)", ctx.guild.id, message.id, role.id, str(emoji))
             await ctx.respond("Reaction role added.", ephemeral=True)
 
         elif role.id in [x[0] for x in data]:
@@ -37,8 +36,8 @@ class Reaction(commands.Cog):
             except:
                 await ctx.respond("Invalid emoji.", ephemeral=True)
                 return
-            async with self.bot.db.execute("INSERT INTO controlpanel_reactionrole (guild_id, message_id, role_id, emoji) VALUES (?, ?, ?, ?)", (ctx.guild.id, message.id, role.id, str(emoji))) as cursor:
-                await self.bot.db.commit()
+            
+            await self.bot.db.execute("INSERT INTO controlpanel_reactionrole (guild_id, message_id, role_id, emoji) VALUES ($1, $2, $3, $4)", ctx.guild.id, message.id, role.id, str(emoji))
             await ctx.respond("Reaction role created.", ephemeral=True)
 
     @has_permissions(manage_roles=True)
@@ -50,21 +49,18 @@ class Reaction(commands.Cog):
             return
         
         if role: 
-            async with self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = ? AND role_id = ?", (message.id, role.id)) as cursor:
-                await self.bot.db.commit()
+            await self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = $1 AND role_id = $2", message.id, role.id)
             await ctx.respond("Reaction role removed.", ephemeral=True)
 
         if emoji:
-            async with self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = ? AND emoji = ?", (message.id, emoji)) as cursor:
-                await self.bot.db.commit()
+            await self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = $1 AND emoji = $2", message.id, emoji)
             await ctx.respond("Reaction role removed.", ephemeral=True)
 
     @has_permissions(manage_roles=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def clear_reaction_roles(self, ctx, message: discord.Message):
 
-        async with self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = ?", (message.id,)) as cursor:
-            await self.bot.db.commit()
+        await self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = $1", message.id)
         await ctx.respond("Reaction roles cleared.", ephemeral=True)
 
     @commands.Cog.listener()
@@ -82,8 +78,7 @@ class Reaction(commands.Cog):
         if guild_id is None:
             return
         
-        async with self.bot.db.execute("SELECT role_id, emoji FROM controlpanel_reactionrole WHERE message_id = ?", (message_id,)) as cursor:
-            data = await cursor.fetchall()
+        data = await self.bot.db.fetch("SELECT role_id, emoji FROM controlpanel_reactionrole WHERE message_id = $1", message_id)
 
 
         if not data:
@@ -110,8 +105,7 @@ class Reaction(commands.Cog):
         if guild_id is None:
             return
         
-        async with self.bot.db.execute("SELECT role_id, emoji FROM controlpanel_reactionrole WHERE message_id = ?", (message_id,)) as cursor:
-            data = await cursor.fetchall()
+        data = await self.bot.db.fetch("SELECT role_id, emoji FROM controlpanel_reactionrole WHERE message_id = $1", message_id)
 
 
         if not data:

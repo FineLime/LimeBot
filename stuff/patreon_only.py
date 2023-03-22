@@ -8,35 +8,14 @@ creator_access_token = os.environ.get("CREATOR_ACCESS_TOKEN")
 api_client = patreon.API(creator_access_token)
 campaign_id = os.environ.get("CAMPAIGN_ID")
 
-
-fields = {
-    'patron_count': 'patron_count',
-}
-patrons = api_client.fetch_page_of_pledges(campaign_id, 200, fields=fields)
-
+cool_people = []
 
 patreon_cache = { 
     'patrons': None,
     'last_update': None
 }
 
-fields = {
-    'fields[tier]': 'title',
-    'fields[member]': 'email'
-}
-
-titles = { 
-    '9638482': 'Tangerine',
-    '9638654': 'Grapefruit',
-    '9638663': 'Lemon'
-}
-
 tiers = ['9638482', '9638654', '9638663']
-
-member_id = "123456789"
-
-url = f"https://api.patreon.com/oauth2/v2/campaigns/{campaign_id}/members?include=currently_entitled_tiers&fields[tier]=title&fields[member]=email"
-member_url = f"https://api.patreon.com/oauth2/v2/members/{member_id}?include=currently_entitled_tiers&fields[tier]=title&fields[member]=email&fields[user]=social_connections"
 
 def get_patreon_users():  
 
@@ -61,8 +40,6 @@ def get_patreon_title(patron_id):
     patron = patron[0]  
     tier_id = patron['relationships']['reward']['data']['id']
 
-    tier_name = titles[tier_id]
-
     return tier_id
 
     
@@ -70,6 +47,9 @@ def get_patreon_title(patron_id):
 
 def tangerine_only():
     def predicate(ctx):
+
+        if str(ctx.author.id) in cool_people:
+            return True
 
         patrons = get_patreon_users()
         
@@ -91,6 +71,9 @@ def tangerine_only():
 def grapefruit_only():
     def predicate(ctx):
 
+        if str(ctx.author.id) in cool_people:
+            return True
+
         patrons = get_patreon_users()
         
         patrons = [patron for patron in patrons['included'] if patron['type'] == 'user' and patron['attributes']['social_connections']['discord']['user_id'] == str(ctx.author.id)]
@@ -110,6 +93,9 @@ def grapefruit_only():
 
 def lemon_only():
     def predicate(ctx):
+
+        if str(ctx.author.id) in cool_people:
+            return True
 
         patrons = get_patreon_users()
         

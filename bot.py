@@ -3,6 +3,9 @@ from discord.ext import commands
 import os 
 import aiosqlite
 import asyncio
+import asyncpg
+
+db_pass = os.environ.get("DB_PASS")
 
 bot = discord.Bot(
     command_prefix=commands.when_mentioned_or(";"),
@@ -18,7 +21,7 @@ async def set_up():
         bot.db = await aiosqlite.connect(database)
 
     else:
-        bot.db = await aiosqlite.connect("db.sqlite3")
+        bot.db = await asyncpg.create_pool(database="postgres", user="postgres", password=db_pass, host="localhost", port=5432)
     
 @bot.event
 async def on_ready():

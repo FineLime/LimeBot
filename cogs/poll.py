@@ -2,11 +2,12 @@ import discord
 from discord.ext import commands
 import math
 from datetime import datetime
+from datetime import timedelta
 
 class pollView(discord.ui.View):
 
     def __init__(self, timeout):
-        super().__init__(timeout=timeout*60)
+        super().__init__(timeout=timeout)
         self.voters = []
 
     @discord.ui.button(label="End Poll", style=discord.ButtonStyle.red, row=2) 
@@ -61,14 +62,15 @@ class Poll(commands.Cog):
         if len(options) < 2:
             return await ctx.send("You need at least 2 options.")
         
-        view = pollView(timeout=hours) 
+        view = pollView(timeout=hours*60*60)
         for i, option in enumerate(options):
             if option is not None:
                 view.add_item(pollButton(option, math.floor(i/5)))
         
+        end_time = datetime.utcnow() + timedelta(hours=hours)
         embed = discord.Embed(title=question, color=discord.Color.blurple())
-        embed.description = "\n".join([f"{i+1}. {option} (0)" for i, option in enumerate(options)])
-        embed.description += f"\n\n**Poll will end in <t:{int((ctx.message.created_at+datetime.timedelta(hours=hours)).timestamp())}:R>**"
+        embed.description = "\n".join([f"{i+1}. {option} (0)" for i, option in enumerate(options) if option is not None])
+        embed.description += f"\n\n**Poll will end in <t:{int(end_time.timestamp())}:R>**"
 
         await ctx.respond(embed=embed, view=view)
         

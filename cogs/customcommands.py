@@ -12,15 +12,18 @@ class CustomCommands(commands.Cog):
     @commands.has_permissions(manage_guild=True)
     async def addcommand(self, ctx, command, response: str): 
 
-        async with self.bot.db.execute("SELECT * FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (ctx.guild.id, command)) as cursor:
-            result = await cursor.fetchone()
+        # async with self.bot.db.execute("SELECT * FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (ctx.guild.id, command)) as cursor:
+        #     result = await cursor.fetchone()
+
+        result = await self.bot.db.fetch("SELECT * FROM controlpanel_customcommand WHERE guild_id = $1 and name = $2", ctx.guild.id, command)
 
         if result:
             await ctx.respond("This command already exists")
             return
         
-        async with self.bot.db.execute("INSERT INTO controlpanel_customcommand (guild_id, name, response, permission) VALUES (?, ?, ?, ?)", (ctx.guild.id, command, response, 'everyone')) as cursor:
-            await self.bot.db.commit()
+        # async with self.bot.db.execute("INSERT INTO controlpanel_customcommand (guild_id, name, response, permission) VALUES (?, ?, ?, ?)", (ctx.guild.id, command, response, 'everyone')) as cursor:
+        #     await self.bot.db.commit()
+        await self.bot.db.execute("INSERT INTO controlpanel_customcommand (guild_id, name, response, permission) VALUES ($1, $2, $3, $4)", ctx.guild.id, command, response, 'everyone')
 
         await ctx.respond(f"Added command {command} successfully.")
 
@@ -28,15 +31,17 @@ class CustomCommands(commands.Cog):
     @commands.has_permissions(manage_guild=True)
     async def removecommand(self, ctx, command):
         
-        async with self.bot.db.execute("SELECT * FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (ctx.guild.id, command)) as cursor:
-            result = await cursor.fetchone()
+        # async with self.bot.db.execute("SELECT * FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (ctx.guild.id, command)) as cursor:
+        #     result = await cursor.fetchone()
+        result = await self.bot.db.fetch("SELECT * FROM controlpanel_customcommand WHERE guild_id = $1 and name = $2", ctx.guild.id, command)
 
         if not result:
             await ctx.respond("This command does not exist")
             return
         
-        async with self.bot.db.execute("DELETE FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (ctx.guild.id, command)) as cursor:
-            await self.bot.db.commit()
+        # async with self.bot.db.execute("DELETE FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (ctx.guild.id, command)) as cursor:
+        #     await self.bot.db.commit()
+        await self.bot.db.execute("DELETE FROM controlpanel_customcommand WHERE guild_id = $1 and name = $2", ctx.guild.id, command)
 
         await ctx.respond(f"Removed command {command} successfully.")
 
@@ -45,8 +50,9 @@ class CustomCommands(commands.Cog):
         if message.author.bot:
             return
 
-        async with self.bot.db.execute("SELECT * FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (message.guild.id, message.content.split(" ")[0])) as cursor:
-            result = await cursor.fetchone()
+        # async with self.bot.db.execute("SELECT * FROM controlpanel_customcommand WHERE guild_id = ? and name = ?", (message.guild.id, message.content.split(" ")[0])) as cursor:
+        #     result = await cursor.fetchone()
+        result = await self.bot.db.fetchrow("SELECT * FROM controlpanel_customcommand WHERE guild_id = $1 and name = $2", message.guild.id, message.content.split(" ")[0])
 
         if result:
             response = result[2]
