@@ -16,7 +16,7 @@ token = os.environ.get("BOT_TOKEN")
 async def set_up(): 
 
     # Check if running in heroku
-    if os.environ.get("HEROKU"):
+    if os.environ.get("DATABASE_URL"):
         database = os.environ.get("DATABASE_URL")
         bot.db = await asyncpg.create_pool(database, ssl="require")
 
