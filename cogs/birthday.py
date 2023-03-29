@@ -37,29 +37,29 @@ class Birthday(commands.Cog):
         await ctx.respond("Removed the birthday settings.")
 
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
-    async def birthday(self, ctx, *, day: str, month: str):
+    async def birthday(self, ctx, *, month: str, day: int):
 
         month = month.lower()
 
         match month:
             
-            case "january" | "jan" | "1": 
+            case "january" | "jan" | "1" | "01":
                 month = "01"
-            case "february" | "feb" | "2":
+            case "february" | "feb" | "2" | "02":
                 month = "02"
-            case "march" | "mar" | "3":
+            case "march" | "mar" | "3" | "03":
                 month = "03"
-            case "april" | "apr" | "4":
+            case "april" | "apr" | "4" | "04":
                 month = "04"
-            case "may" | "5":
+            case "may" | "5" | "05":
                 month = "05"
-            case "june" | "jun" | "6":
+            case "june" | "jun" | "6" | "06":
                 month = "06"
-            case "july" | "jul" | "7":
+            case "july" | "jul" | "7" | "07":
                 month = "07"
-            case "august" | "aug" | "8":
+            case "august" | "aug" | "8" | "08":
                 month = "08"
-            case "september" | "sep" | "9":
+            case "september" | "sep" | "9" | "09":
                 month = "09"
             case "october" | "oct" | "10":
                 month = "10"
@@ -68,9 +68,9 @@ class Birthday(commands.Cog):
             case "december" | "dec" | "12":
                 month = "12"
             case _:
-                return await ctx.respond("Invalid month.")
+                return await ctx.respond("Invalid month.", ephemeral=True)
             
-        birthday = f"{day}-{month}"
+        birthday = f"{month}-{day}"
 
         data = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE member_id = $1 AND guild_id = $2", ctx.author.id, ctx.guild.id)
 
@@ -82,6 +82,72 @@ class Birthday(commands.Cog):
         await self.bot.db.execute("INSERT INTO controlpanel_birthday (member_id, guild_id, birthday) VALUES ($1, $2, $3)", ctx.author.id, ctx.guild.id, birthday)
         await ctx.respond(f"Set your birthday to {birthday}.")
 
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def birthday_remove(self, ctx):
+
+        data = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE member_id = $1 AND guild_id = $2", ctx.author.id, ctx.guild.id)
+
+        if not data:
+            return await ctx.respond("You don't have a birthday set.", ephemeral=True)
+
+        await self.bot.db.execute("DELETE FROM controlpanel_birthday WHERE member_id = $1 AND guild_id = $2", ctx.author.id, ctx.guild.id)
+        await ctx.respond("Removed your birthday.")
+
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def birthday_info(self, ctx, member: discord.Member = None):
+
+        member = member or ctx.author
+
+        data = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE member_id = $1 AND guild_id = $2", member.id, ctx.guild.id)
+
+        if not data:
+            return await ctx.respond("That member doesn't have a birthday set.", ephemeral=True)
+
+        birthday = data[0]["birthday"]
+
+        await ctx.respond(f"{member.mention}'s birthday is {birthday}.")
+
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def birthday_next(self, ctx): 
+
+        data = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE guild_id = $1", ctx.guild.id)
+
+        if not data:
+            return await ctx.respond("No birthdays set for this server.", ephemeral=True)
+
+        birthdays = []
+
+        for birthday in data:
+            date = birthday["birthday"]
+            if datetime.now().strftime("%m-%d") <= date:
+                # append for next year
+                birthdays.append({ 
+                    'member_id': birthday["member_id"],
+                    'birthday': f"{datetime.now().strftime('%Y') + 1}-{date}"
+                })
+            else:
+                # append for this year
+                birthdays.append({
+                    'member_id': birthday["member_id"],
+                    'birthday': f"{datetime.now().strftime('%Y')}-{date}"
+                })
+
+        birthdays = sorted(birthdays, key=lambda x: x['birthday'])
+
+        embed = discord.Embed(title="Next Birthdays", color=discord.Color.blurple())
+
+        for num, birthday in enumerate(birthdays):
+            member = ctx.guild.get_member(birthday["member_id"])
+            embed.add_field(name=f"{num + 1}. {member}", value=birthday["birthday"])
+
+            if num == 10:
+                break
+
+        await ctx.respond(embed=embed)
+
+
+        
+
     
 
     @tasks.loop(minutes=1)
@@ -89,7 +155,7 @@ class Birthday(commands.Cog):
 
         db = self.bot.db
 
-        birthdays = await db.fetch("SELECT member_id, guild_id, birthday, celebrated FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
+        birthdays = await db.fetch("SELECT member_id, guild_id, birthday, celebrated FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%m-%d"))
         
         for birthday in birthdays:
 
@@ -116,7 +182,7 @@ class Birthday(commands.Cog):
             if not message:
                 return
             
-            embed = discord.Embed(title=f"It's {member.mention}'{'s' if member.name[-1] != 's' else ''} birthday!", description=message, color=discord.Color.blurple())
+            embed = discord.Embed(title=f"It's {member.name}'{'s' if member.name[-1] != 's' else ''} birthday!", description=message, color=discord.Color.blurple())
 
             await channel.send(embed=embed)
 
