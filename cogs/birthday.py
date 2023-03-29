@@ -119,6 +119,7 @@ class Birthday(commands.Cog):
 
         for birthday in data:
             date = birthday["birthday"]
+            print(date)
             if datetime.now().strftime("%m-%d") <= date:
                 print("append for next year")
                 birthdays.append({ 
