@@ -7,7 +7,7 @@ class Birthday(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.birthday_loop.start(self.bot.db)
+        self.birthday_loop.start(bot.db)
 
     @has_permissions(manage_guild=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
