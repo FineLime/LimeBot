@@ -32,6 +32,48 @@ class Birthday(commands.Cog):
         await self.bot.db.execute("UPDATE controlpanel_guild SET birthday_message = $1 WHERE guild_id = $2", None, ctx.guild.id)
         await ctx.respond("Removed the birthday settings.")
 
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def birthday(self, ctx, *, day: str, month: str):
+
+        month = month.lower()
+
+        match month:
+            
+            case "january" | "jan" | "1": 
+                month = "01"
+            case "february" | "feb" | "2":
+                month = "02"
+            case "march" | "mar" | "3":
+                month = "03"
+            case "april" | "apr" | "4":
+                month = "04"
+            case "may" | "5":
+                month = "05"
+            case "june" | "jun" | "6":
+                month = "06"
+            case "july" | "jul" | "7":
+                month = "07"
+            case "august" | "aug" | "8":
+                month = "08"
+            case "september" | "sep" | "9":
+                month = "09"
+            case "october" | "oct" | "10":
+                month = "10"
+            case "november" | "nov" | "11":
+                month = "11"
+            case "december" | "dec" | "12":
+                month = "12"
+            case _:
+                return await ctx.respond("Invalid month.")
+            
+        birthday = f"{month}-{day}"
+        
+        birthday = datetime.strptime(birthday, "%m-%d").strftime("%m-%d")
+        await self.bot.db.execute("INSERT INTO controlpanel_birthday (member_id, guild_id, birthday) VALUES ($1, $2, $3) ON CONFLICT (member_id, guild_id) DO UPDATE SET birthday = $3", ctx.author.id, ctx.guild.id, birthday)
+        await ctx.respond(f"Set your birthday to {birthday}.")
+
+    
+
     @tasks.loop(hours=24)
     async def birthday_loop(self):
 
