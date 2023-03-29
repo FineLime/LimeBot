@@ -37,10 +37,11 @@ class Birthday(commands.Cog):
         await ctx.respond("Removed the birthday settings.")
 
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
-    async def birthday(self, ctx, *, month: str, day: str):
+    async def birthday(self, ctx, *, month: str, day: int):
 
         month = month.lower()
-
+        day = str(day)
+    
         match month:
             
             case "january" | "jan" | "1" | "01":
@@ -69,7 +70,7 @@ class Birthday(commands.Cog):
                 month = "12"
             case _:
                 return await ctx.respond("Invalid month.", ephemeral=True)
-            
+        
         birthday = f"{month}-{day}"
 
         data = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE member_id = $1 AND guild_id = $2", ctx.author.id, ctx.guild.id)
