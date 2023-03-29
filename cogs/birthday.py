@@ -80,7 +80,7 @@ class Birthday(commands.Cog):
 
     
 
-    @tasks.loop(hours=24)
+    @tasks.loop(minutes=1.0)
     async def birthday_loop(self):
 
         birthdays = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
