@@ -66,9 +66,16 @@ class Birthday(commands.Cog):
             case _:
                 return await ctx.respond("Invalid month.")
             
-        birthday = f"{month}-{day}"
+        birthday = f"{day}-{month}"
 
-        await self.bot.db.execute("INSERT INTO controlpanel_birthday (member_id, guild_id, birthday) VALUES ($1, $2, $3) ON CONFLICT (member_id, guild_id) DO UPDATE SET birthday = $3", ctx.author.id, ctx.guild.id, birthday)
+        data = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE member_id = $1 AND guild_id = $2", ctx.author.id, ctx.guild.id)
+
+        if data:
+            await self.bot.db.execute("UPDATE controlpanel_birthday SET birthday = $1 WHERE member_id = $2 AND guild_id = $3", birthday, ctx.author.id, ctx.guild.id)
+            await ctx.respond(f"Updated your birthday to {birthday}.")
+            return
+
+        await self.bot.db.execute("INSERT INTO controlpanel_birthday (member_id, guild_id, birthday) VALUES ($1, $2, $3)", ctx.author.id, ctx.guild.id, birthday)
         await ctx.respond(f"Set your birthday to {birthday}.")
 
     
@@ -76,7 +83,7 @@ class Birthday(commands.Cog):
     @tasks.loop(hours=24)
     async def birthday_loop(self):
 
-        birthdays = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%m-%d"))
+        birthdays = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
         
         for member_id, guild_id, birthday in birthdays:
             
