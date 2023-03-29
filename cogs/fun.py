@@ -90,7 +90,7 @@ class Fun(commands.Cog):
 
         message = await ctx.respond("Opening the chamber.")
         await asyncio.sleep(1)
-        message = await ctx.fetch_message(message.id)
+        message = await ctx.channel.fetch_message(message.id)
         bullet = random.randint(1, 6)
         await message.edit(content=f"Loading the bullet..")
         await asyncio.sleep(1)
