@@ -50,6 +50,7 @@ class ChatGPT(commands.Cog):
             
             await ctx.followup.send(embed=embed)#
 
+    @grapefruit_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], name="gpt-4")
     async def gpt4(self, ctx, prompt: str):
         
