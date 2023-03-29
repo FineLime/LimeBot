@@ -80,5 +80,20 @@ class Server_Setup(commands.Cog):
             roles = [member.guild.get_role(x[0]) for x in autorole_data]
             await member.add_roles(*roles)
 
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+
+        await self.bot.db.execute("INSERT INTO controlpanel_guild (guild_id, access_token, refresh_token, welcome_channel, welcome_message, birthday_channel, birthday_message) VALUES ($1, $2, $3, $4, $5, $6, $7)", guild.id, None, None, None, None, None, None)
+    
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+            
+        await self.bot.db.execute("DELETE FROM controlpanel_guild WHERE guild_id = $1", guild.id)
+        await self.bot.db.execute("DELETE FROM controlpanel_autorole WHERE guild_id = $1", guild.id)
+        await self.bot.db.execute("DELETE FROM controlpanel_birthday WHERE guild_id = $1", guild.id)
+        await self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE guild_id = $1", guild.id)
+        await self.bot.db.execute("DELETE FROM controlpanel_reminder WHERE guild_id = $1", guild.id)
+
+
 def setup(bot):
     bot.add_cog(Server_Setup(bot))
