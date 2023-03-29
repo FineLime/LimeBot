@@ -120,13 +120,13 @@ class Birthday(commands.Cog):
         for birthday in data:
             date = birthday["birthday"]
             if datetime.now().strftime("%m-%d") <= date:
-                # append for next year
+                print("append for next year")
                 birthdays.append({ 
                     'member_id': birthday["member_id"],
-                    'birthday': f"{datetime.now().strftime('%Y') + 1}-{date}"
+                    'birthday': f"{int(datetime.now().strftime('%Y')) + 1}-{date}"
                 })
             else:
-                # append for this year
+                print("append for this year")
                 birthdays.append({
                     'member_id': birthday["member_id"],
                     'birthday': f"{datetime.now().strftime('%Y')}-{date}"
