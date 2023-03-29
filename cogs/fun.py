@@ -89,8 +89,8 @@ class Fun(commands.Cog):
     async def rr(self, ctx): 
 
         message = await ctx.respond("Opening the chamber.")
-        message = await ctx.fetch_message(message.id)
         await asyncio.sleep(0.5)
+        message = await ctx.fetch_message(message.id)
         bullet = random.randint(1, 6)
         await message.edit(content=f"Loading the bullet..")
         await asyncio.sleep(0.5)
