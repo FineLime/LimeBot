@@ -105,7 +105,8 @@ class Birthday(commands.Cog):
             guild = self.bot.get_guild(guild_id)
             member = guild.get_member(member_id)
             channel = guild.get_channel(await db.fetchval("SELECT birthday_channel FROM controlpanel_guild WHERE guild_id = $1", guild_id))
-            message = await db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id).replace("{$user}", member.mention)
+            message = await db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id)
+            message = message.replace("{$user}", member.mention)
 
             await db.execute("UPDATE controlpanel_birthday SET celebrated = $1 WHERE member_id = $2 AND guild_id = $3", datetime.now().strftime("%Y"), member_id, guild_id)
 
@@ -115,7 +116,7 @@ class Birthday(commands.Cog):
             if not message:
                 return
             
-            embed = discord.Embed(title="Happy Birthday! :tada:", description=message, color=discord.Color.blurple())
+            embed = discord.Embed(title=f"It's {member.mention}'{'s' if member.name[-1] != 's' else ''} birthday!", description=message, color=discord.Color.blurple())
 
             await channel.send(embed=embed)
 
