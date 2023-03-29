@@ -1,6 +1,7 @@
 import discord 
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions, MissingPermissions
+from discord.utils import get
 from datetime import datetime
 import os 
 import asyncpg
@@ -103,6 +104,8 @@ class Birthday(commands.Cog):
             
 
             guild = self.bot.get_guild(guild_id)
+            print(guild)
+            print(guild_id)
             member = guild.get_member(member_id)
             channel = guild.get_channel(await db.fetchval("SELECT birthday_channel FROM controlpanel_guild WHERE guild_id = $1", guild_id))
             message = await db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id)
