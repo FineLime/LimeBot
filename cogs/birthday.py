@@ -103,8 +103,6 @@ class Birthday(commands.Cog):
             
 
             guild = self.bot.get_guild(guild_id)
-            print(guild)
-            print(guild_id)
             member = guild.get_member(member_id)
             channel = guild.get_channel(await db.fetchval("SELECT birthday_channel FROM controlpanel_guild WHERE guild_id = $1", guild_id))
             message = await db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id)
@@ -116,8 +114,10 @@ class Birthday(commands.Cog):
 
             if not message:
                 return
+            
+            embed = discord.Embed(title="Happy Birthday! :tada:", description=message, color=discord.Color.blurple())
 
-            await channel.send(message.format(member=member.mention))
+            await channel.send(embed=embed)
 
     @birthday_loop.before_loop
     async def before_birthday_loop(self):
