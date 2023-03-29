@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions, MissingPermissions
 from datetime import datetime
+import os 
+import asyncpg
 
 class Birthday(commands.Cog):
 
@@ -84,7 +86,8 @@ class Birthday(commands.Cog):
     @tasks.loop(hours=12)
     async def birthday_loop(self):
 
-        db = self.bot.db
+        database = os.environ.get("DATABASE_URL")
+        db = await asyncpg.create_pool(database, ssl="require")
 
         birthdays = await db.fetch("SELECT member_id, guild_id, birthday, celebrated FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
         
