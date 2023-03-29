@@ -67,8 +67,7 @@ class Birthday(commands.Cog):
                 return await ctx.respond("Invalid month.")
             
         birthday = f"{month}-{day}"
-        
-        birthday = datetime.strptime(birthday, "%m-%d").strftime("%m-%d")
+
         await self.bot.db.execute("INSERT INTO controlpanel_birthday (member_id, guild_id, birthday) VALUES ($1, $2, $3) ON CONFLICT (member_id, guild_id) DO UPDATE SET birthday = $3", ctx.author.id, ctx.guild.id, birthday)
         await ctx.respond(f"Set your birthday to {birthday}.")
 
