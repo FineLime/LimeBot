@@ -108,7 +108,6 @@ class Birthday(commands.Cog):
             member = guild.get_member(member_id)
             channel = guild.get_channel(await db.fetchval("SELECT birthday_channel FROM controlpanel_guild WHERE guild_id = $1", guild_id))
             message = await db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id)
-            role = guild.get_role(await db.fetchval("SELECT birthday_role FROM controlpanel_guild WHERE guild_id = $1", guild_id))
 
             await db.execute("UPDATE controlpanel_birthday SET celebrated = $1 WHERE member_id = $2 AND guild_id = $3", datetime.now().strftime("%Y"), member_id, guild_id)
 
@@ -123,7 +122,7 @@ class Birthday(commands.Cog):
     @birthday_loop.before_loop
     async def before_birthday_loop(self):
         await self.bot.wait_until_ready()
-            
+
 
     
 def setup(bot):
