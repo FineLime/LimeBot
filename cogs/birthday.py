@@ -7,6 +7,7 @@ class Birthday(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.birthday_loop.start()
 
     @has_permissions(manage_guild=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
@@ -80,18 +81,23 @@ class Birthday(commands.Cog):
 
     
 
-    @tasks.loop(minutes=1.0)
+    @tasks.loop(hours=12)
     async def birthday_loop(self):
 
-        birthdays = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
+        birthdays = await self.bot.db.fetch("SELECT member_id, guild_id, birthday, celebrated FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
         
-        for member_id, guild_id, birthday in birthdays:
-            
+        for member_id, guild_id, birthday, celebrated in birthdays:
+
+            if datetime.now().strftime("%Y") == celebrated:
+                return
+
             guild = self.bot.get_guild(guild_id)
             member = guild.get_member(member_id)
             channel = guild.get_channel(await self.bot.db.fetchval("SELECT birthday_channel FROM controlpanel_guild WHERE guild_id = $1", guild_id))
             message = await self.bot.db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id)
             role = guild.get_role(await self.bot.db.fetchval("SELECT birthday_role FROM controlpanel_guild WHERE guild_id = $1", guild_id))
+
+            await self.bot.db.execute("UPDATE controlpanel_birthday SET celebrated = $1 WHERE member_id = $2 AND guild_id = $3", datetime.now().strftime("%Y"), member_id, guild_id)
 
             if not channel:
                 return
