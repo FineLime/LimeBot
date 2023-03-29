@@ -87,8 +87,7 @@ class Birthday(commands.Cog):
     @tasks.loop(hours=12)
     async def birthday_loop(self):
 
-        database = os.environ.get("DATABASE_URL")
-        db = await asyncpg.create_pool(database, ssl="require")
+        db = self.bot.db
 
         birthdays = await db.fetch("SELECT member_id, guild_id, birthday, celebrated FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
         
@@ -120,6 +119,11 @@ class Birthday(commands.Cog):
                 return
 
             await channel.send(message.format(member=member.mention))
+
+    @birthday_loop.before_loop
+    async def before_birthday_loop(self):
+        await self.bot.wait_until_ready()
+            
 
     
 def setup(bot):
