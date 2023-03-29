@@ -111,7 +111,7 @@ class Fun(commands.Cog):
             await ctx.author.timeout(timeout_time * 60, reason="You died in a game of Russian Roulette.")
 
         else:
-            msg += f"**CLICK**, you're alive, {random.choice(['luckily', 'unfortunately', 'for now...', 'unless we just live in a simulation, then are we actually alive to begin with?', 'UwU', 'thank the lord', 'now do it again'])}."
+            msg += f"**\*\*CLICK\*\***, you're alive, {random.choice(['luckily', 'unfortunately', 'for now...', 'unless we just live in a simulation, then are we actually alive to begin with?', 'UwU', 'thank the lord', 'now do it again'])}."
             await ctx.respond(msg)
 
     
