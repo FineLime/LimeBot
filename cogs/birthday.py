@@ -91,10 +91,16 @@ class Birthday(commands.Cog):
 
         birthdays = await db.fetch("SELECT member_id, guild_id, birthday, celebrated FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
         
-        for member_id, guild_id, birthday, celebrated in birthdays:
+        for birthday in birthdays:
+
+            guild_id = birthday["guild_id"]
+            member_id = birthday["member_id"]
+            celebrated = birthday["celebrated"]
 
             if datetime.now().strftime("%Y") == celebrated:
                 return
+            
+            
 
             guild = self.bot.get_guild(guild_id)
             member = guild.get_member(member_id)
