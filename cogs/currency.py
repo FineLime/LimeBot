@@ -14,7 +14,7 @@ class Currency(commands.Cog):
     async def balance(self, ctx, member: discord.Member = None):
 
         user = member or ctx.author
-        guild = str(ctx.guild.id)
+        guild = ctx.guild.id
 
         result = await self.bot.db.fetchrow("SELECT * FROM controlpanel_member WHERE member_id = $1 and guild_id = $2", user.id, guild)
 
@@ -34,7 +34,7 @@ class Currency(commands.Cog):
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def leaderboard(self, ctx):
 
-        guild = str(ctx.guild.id)
+        guild = ctx.guild.id
 
         result = await self.bot.db.fetch("SELECT member_id, coins FROM controlpanel_member WHERE guild_id = $1 ORDER BY coins DESC", guild)
 
