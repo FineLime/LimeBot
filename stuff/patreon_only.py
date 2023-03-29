@@ -8,7 +8,7 @@ creator_access_token = os.environ.get("CREATOR_ACCESS_TOKEN")
 api_client = patreon.API(creator_access_token)
 campaign_id = os.environ.get("CAMPAIGN_ID")
 
-cool_people = [348538644887240716]
+cool_people = ["348538644887240716"]
 
 patreon_cache = { 
     'patrons': None,
