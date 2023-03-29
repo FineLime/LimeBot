@@ -1,6 +1,7 @@
 import discord 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions, MissingPermissions
+from datetime import datetime
 
 class Birthday(commands.Cog):
 
@@ -30,6 +31,27 @@ class Birthday(commands.Cog):
     async def birthday_remove(self, ctx):
         await self.bot.db.execute("UPDATE controlpanel_guild SET birthday_message = $1 WHERE guild_id = $2", None, ctx.guild.id)
         await ctx.respond("Removed the birthday settings.")
+
+    @tasks.loop(hours=24)
+    async def birthday_loop(self):
+
+        birthdays = await self.bot.db.fetch("SELECT member_id, guild_id, birthday FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%m-%d"))
+        
+        for member_id, guild_id, birthday in birthdays:
+            
+            guild = self.bot.get_guild(guild_id)
+            member = guild.get_member(member_id)
+            channel = guild.get_channel(await self.bot.db.fetchval("SELECT birthday_channel FROM controlpanel_guild WHERE guild_id = $1", guild_id))
+            message = await self.bot.db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id)
+            role = guild.get_role(await self.bot.db.fetchval("SELECT birthday_role FROM controlpanel_guild WHERE guild_id = $1", guild_id))
+
+            if not channel:
+                return
+
+            if not message:
+                return
+
+            await channel.send(message.format(member=member.mention))
 
     
 def setup(bot):
