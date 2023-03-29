@@ -88,16 +88,9 @@ class Fun(commands.Cog):
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def rr(self, ctx): 
 
-        message = await ctx.respond("Opening the chamber.")
-        await asyncio.sleep(1)
-        message = await ctx.channel.fetch_message(message.id)
-        bullet = random.randint(1, 6)
-        await message.edit(content=f"Loading the bullet..")
-        await asyncio.sleep(1)
-        chamber = random.randint(1, 6)
-        await message.edit(content=f"Spinning the chamber...")
-        await asyncio.sleep(1)
         msg = "<a:PepeGun:533822706144116752> FIRE...! "
+        bullet = random.randint(1, 6)
+        chamber = random.randint(1, 6)
 
         if bullet == chamber:
             msg += "**\*\*BANG\*\***, you're dead.\n"
@@ -114,12 +107,12 @@ class Fun(commands.Cog):
             else: 
                 msg += f"Honestly, you're kind of a liability, you can join back in next round, I'm not reviving you."
 
-            await message.edit(content=msg)
+            await ctx.respond(msg)
             await ctx.author.timeout(timeout_time * 60, reason="You died in a game of Russian Roulette.")
 
         else:
             msg += f"**CLICK**, you're alive, {random.choice(['luckily', 'unfortunately', 'for now...', 'unless we just live in a simulation, then are we actually alive to begin with?', 'UwU', 'thank the lord', 'now do it again'])}."
-        
+            await ctx.respond(msg)
 
     
 
