@@ -84,7 +84,7 @@ class Birthday(commands.Cog):
 
     
 
-    @tasks.loop(hours=12)
+    @tasks.loop(minutes=1)
     async def birthday_loop(self):
 
         db = self.bot.db
@@ -105,7 +105,7 @@ class Birthday(commands.Cog):
             guild = self.bot.get_guild(guild_id)
             member = guild.get_member(member_id)
             channel = guild.get_channel(await db.fetchval("SELECT birthday_channel FROM controlpanel_guild WHERE guild_id = $1", guild_id))
-            message = await db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id)
+            message = await db.fetchval("SELECT birthday_message FROM controlpanel_guild WHERE guild_id = $1", guild_id).replace("{$user}", member.mention)
 
             await db.execute("UPDATE controlpanel_birthday SET celebrated = $1 WHERE member_id = $2 AND guild_id = $3", datetime.now().strftime("%Y"), member_id, guild_id)
 
