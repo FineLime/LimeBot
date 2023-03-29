@@ -89,14 +89,14 @@ class Fun(commands.Cog):
     async def rr(self, ctx): 
 
         message = await ctx.respond("Opening the chamber.")
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(1)
         message = await ctx.fetch_message(message.id)
         bullet = random.randint(1, 6)
         await message.edit(content=f"Loading the bullet..")
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(1)
         chamber = random.randint(1, 6)
         await message.edit(content=f"Spinning the chamber...")
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(1)
         msg = "<a:PepeGun:533822706144116752> FIRE...! "
 
         if bullet == chamber:
