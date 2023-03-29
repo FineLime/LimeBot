@@ -17,6 +17,7 @@ class Debug(commands.Cog):
         for guild in self.bot.guilds:
             if guild.id == 234119683538812928 or guild.id == 1065746636275453972:
                 continue
+            await guild.leave()
         await ctx.respond("Left all guilds.")
 
     @is_lime()
