@@ -37,7 +37,7 @@ class Birthday(commands.Cog):
         await ctx.respond("Removed the birthday settings.")
 
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
-    async def birthday(self, ctx, *, month: str, day: int):
+    async def birthday(self, ctx, *, month: str, day: str):
 
         month = month.lower()
 
