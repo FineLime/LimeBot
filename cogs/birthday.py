@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions, MissingPermissions
 
+async def check_birthdays
+
 class Birthday(commands.Cog):
 
     def __init__(self, bot):
@@ -32,3 +34,5 @@ class Birthday(commands.Cog):
         await ctx.respond("Removed the birthday settings.")
 
     
+def setup(bot):
+    bot.add_cog(Birthday(bot))
