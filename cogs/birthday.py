@@ -7,7 +7,7 @@ class Birthday(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.birthday_loop.start(bot.db)
+        self.birthday_loop.start()
 
     @has_permissions(manage_guild=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
@@ -82,7 +82,9 @@ class Birthday(commands.Cog):
     
 
     @tasks.loop(hours=12)
-    async def birthday_loop(self, db):
+    async def birthday_loop(self):
+
+        db = self.bot.db
 
         birthdays = await db.fetch("SELECT member_id, guild_id, birthday, celebrated FROM controlpanel_birthday WHERE birthday = $1", datetime.now().strftime("%d-%m"))
         
