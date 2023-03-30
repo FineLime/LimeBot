@@ -128,7 +128,7 @@ class Imagine(commands.Cog):
     
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Create variations of an image")
-    async def variations(self, ctx, image: discord.File, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"): 
+    async def variations(self, ctx, prompt: str, image = discord.Attachment, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"): 
 
         await ctx.defer()
 
