@@ -89,12 +89,19 @@ class Fun(commands.Cog):
     async def rr(self, ctx): 
 
         msg = "<a:PepeGun:533822706144116752> FIRE...! "
-        bullet = random.randint(1, 6)
-        chamber = random.randint(1, 6)
+        bullet = random.randint(1, 5)
+        chamber = random.randint(1, 5)
 
         if bullet == chamber:
             msg += "**\*\*BANG\*\***, you're dead.\n"
             timeout_time = random.randint(1, 15)
+
+            duration = timedelta(minutes=timeout_time)
+            try: 
+                await ctx.author.timeout_for(duration=duration, reason="UwU")
+            except discord.errors.Forbidden:
+                await ctx.respond("But don't worry, I have phoenix up!")
+                return
             
             if timeout_time < 3:
                 msg += f"Don't worry, I have quick revive, I'll have you back up in {timeout_time} minutes."
@@ -109,8 +116,6 @@ class Fun(commands.Cog):
 
             await ctx.respond(msg)
 
-            duration = timedelta(minutes=timeout_time)
-            await ctx.author.timeout_for(duration=duration, reason="UwU")
 
         else:
             msg += f"**\*\*CLICK\*\***, you're alive, {random.choice(['luckily', 'unfortunately', 'for now...', 'unless we just live in a simulation, then are we actually alive to begin with?', 'UwU', 'thank the lord', 'now do it again'])}."
