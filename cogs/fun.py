@@ -100,7 +100,8 @@ class Fun(commands.Cog):
             try: 
                 await ctx.author.timeout_for(duration=duration, reason="UwU")
             except discord.errors.Forbidden:
-                await ctx.respond("But don't worry, I have phoenix up!")
+                msg += "But don't worry, I have phoenix up!"
+                await ctx.respond(msg)
                 return
             
             if timeout_time < 3:
