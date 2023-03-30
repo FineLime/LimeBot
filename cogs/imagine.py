@@ -126,37 +126,7 @@ class Imagine(commands.Cog):
             await ctx.respond("This command is only available to Tangerine Patrons.\nYou can become a patron at https://www.patreon.com/FineLime\n\nIf you are a patron, please make sure you have linked your Discord account to your Patreon account and have waited at least 5 minutes for the cache to update.", ephemeral=True)
 
     
-    @tangerine_only()
-    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Create variations of an image")
-    async def variations(self, ctx, prompt: str, image = discord.Attachment, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"): 
-
-        await ctx.defer()
-
-        image = Image.open(image)
-
-        image_bytes = io.BytesIO()
-        image.save(image_bytes, format='PNG')
-        image_bytes.seek(0)
-
-        images = self.stability_api[engine].generate(
-            prompt=prompt,  
-            steps=30,
-            cfg_scale=8.0,
-            width=512,
-            height=512,
-            samples=4,
-            init_image=image_bytes
-        )
-
-        files = []
-        for resp in images: 
-            for artifact in resp.artifacts:
-                if artifact.type == generation.ARTIFACT_IMAGE:
-                    image_bytes = io.BytesIO(artifact.binary)
-                    files.append(discord.File(image_bytes, filename='image.png'))
-            
-        await ctx.followup.send(f"**{prompt}**", files=files)
-
+    
                     
 
 def setup(bot):
