@@ -18,10 +18,11 @@ engines = [
 
 class ImagineView(discord.ui.View):
 
-    def __init__(self, bot, prompt, user): 
+    def __init__(self, bot, prompt, user, stability_api): 
         self.bot = bot
         self.prompt = prompt
         self.user = user
+        self.stability_api = stability_api
         super().__init__()
 
     @discord.ui.select( 
@@ -38,7 +39,7 @@ class ImagineView(discord.ui.View):
         
         engine = select.values[0]
         await interaction.response.defer()
-        images = self.bot.stability_api[engine].generate(
+        images = self.stability_api[engine].generate(
             prompt=self.prompt,  
             steps=30,
             cfg_scale=8.0,
@@ -54,7 +55,7 @@ class ImagineView(discord.ui.View):
                     image_bytes = io.BytesIO(artifact.binary)
                     files.append(discord.File(image_bytes, filename='image.png'))
             
-        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
 
     @discord.ui.select(
         placeholder="Variations 1",
@@ -71,7 +72,7 @@ class ImagineView(discord.ui.View):
         engine = select.values[0]
         await interaction.response.defer()
         original_image = interaction.message.attachements[0].url    
-        images = self.bot.stability_api[engine].generate(
+        images = self.stability_api[engine].generate(
             prompt=self.prompt,
             init_image=original_image,
             start_schedule=0.5,
@@ -89,7 +90,7 @@ class ImagineView(discord.ui.View):
                     image_bytes = io.BytesIO(artifact.binary)
                     files.append(discord.File(image_bytes, filename='image.png'))
 
-        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
 
     @discord.ui.select(
         placeholder="Variations 2",
@@ -106,7 +107,7 @@ class ImagineView(discord.ui.View):
             engine = select.values[0]
             await interaction.response.defer()
             original_image = interaction.message.attachements[0].url    
-            images = self.bot.stability_api[engine].generate(
+            images = self.stability_api[engine].generate(
                 prompt=self.prompt,
                 init_image=original_image,
                 start_schedule=0.5,
@@ -124,7 +125,7 @@ class ImagineView(discord.ui.View):
                         image_bytes = io.BytesIO(artifact.binary)
                         files.append(discord.File(image_bytes, filename='image.png'))
     
-            await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+            await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
 
     @discord.ui.select(
         placeholder="Variations 3",
@@ -141,7 +142,7 @@ class ImagineView(discord.ui.View):
         engine = select.values[0]
         await interaction.response.defer()
         original_image = interaction.message.attachements[0].url    
-        images = self.bot.stability_api[engine].generate(
+        images = self.stability_api[engine].generate(
             prompt=self.prompt,
             init_image=original_image,
             start_schedule=0.5,
@@ -159,7 +160,7 @@ class ImagineView(discord.ui.View):
                     image_bytes = io.BytesIO(artifact.binary)
                     files.append(discord.File(image_bytes, filename='image.png'))
 
-        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
 
     @discord.ui.select(
         placeholder="Variations 4",
@@ -176,7 +177,7 @@ class ImagineView(discord.ui.View):
         engine = select.values[0]
         await interaction.response.defer()
         original_image = interaction.message.attachements[0].url    
-        images = self.bot.stability_api[engine].generate(
+        images = self.stability_api[engine].generate(
             prompt=self.prompt,
             init_image=original_image,
             start_schedule=0.5,
@@ -194,7 +195,7 @@ class ImagineView(discord.ui.View):
                     image_bytes = io.BytesIO(artifact.binary)
                     files.append(discord.File(image_bytes, filename='image.png'))
 
-        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
 
     async def interaction_check(self, interaction: discord.Interaction):
             
@@ -256,7 +257,7 @@ class Imagine(commands.Cog):
                     image_bytes = io.BytesIO(artifact.binary)
                     files.append(discord.File(image_bytes, filename='image.png'))
             
-        await ctx.followup.send(f"**{prompt}**", files=files, view=ImagineView(self.bot, prompt, ctx.author.id))
+        await ctx.followup.send(f"**{prompt}**", files=files, view=ImagineView(self.bot, prompt, ctx.author.id, self.stability_api))
 
     @imagine.error
     async def imagine_error(self, ctx, error):
