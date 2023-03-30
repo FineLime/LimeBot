@@ -79,7 +79,7 @@ class ImagineView(discord.ui.View):
     async def variations(self, select: discord.ui.Select, interaction: discord.Interaction):
 
         engine = select.values[0].split(" - ")[1]
-        init_image = interaction.response.message.attachments[ int(select.values[0].split(" - ")[0]) - 1 ].url 
+        init_image = interaction.response.attachments[int(select.values[0].split(" - ")[0]) - 1 ].url 
         await interaction.response.defer()
         images = self.stability_api[engine].generate(
             prompt=self.prompt,
