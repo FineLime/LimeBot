@@ -44,7 +44,7 @@ class ImagineView(discord.ui.View):
             cfg_scale=8.0,
             width=512,
             height=512,
-            samples=3,
+            samples=4,
         )
 
         files = []
@@ -79,7 +79,7 @@ class ImagineView(discord.ui.View):
             cfg_scale=8.0,
             width=512,
             height=512,
-            samples=3,
+            samples=4,
         )
 
         files = []
@@ -114,7 +114,7 @@ class ImagineView(discord.ui.View):
                 cfg_scale=8.0,
                 width=512,
                 height=512,
-                samples=3,
+                samples=4,
             )
     
             files = []
@@ -149,7 +149,7 @@ class ImagineView(discord.ui.View):
             cfg_scale=8.0,
             width=512,
             height=512,
-            samples=3,
+            samples=4,
         )
 
         files = []
@@ -184,7 +184,7 @@ class ImagineView(discord.ui.View):
             cfg_scale=8.0,
             width=512,
             height=512,
-            samples=3,  
+            samples=4,  
         )
 
         files = []
@@ -198,7 +198,7 @@ class ImagineView(discord.ui.View):
 
     async def interaction_check(self, interaction: discord.Interaction):
             
-        if interaction.user.id == self.user.id:
+        if interaction.user.id == self.user:
             return True
         else:
             await interaction.response.send_message("You can't use this view", ephemeral=True)
@@ -237,7 +237,7 @@ class Imagine(commands.Cog):
     async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"):
 
         await ctx.defer()
-        
+
 
 
         images = self.stability_api[engine].generate(
@@ -246,7 +246,7 @@ class Imagine(commands.Cog):
             cfg_scale=8.0,
             width=512,
             height=512,
-            samples=3,
+            samples=4,
         )
 
         files = []
