@@ -23,6 +23,29 @@ class Imagine(commands.Cog):
 
         self.bot = bot
         os.environ["STABILITY_HOST"] = 'grpc.stability.ai:443'
+        self.stability_api = { 
+            "stable-diffusion-v1-5": client.StabilityInference(
+                key = os.environ.get('STABILITY_API_KEY'),
+                engine='stable-diffusion-v1-5',
+                verbose=True
+            ),
+            "stable-diffusion-512-v2-1": client.StabilityInference(
+                key = os.environ.get('STABILITY_API_KEY'),
+                engine='stable-diffusion-512-v2-1',
+                verbose=True
+            ),
+            "stable-diffusion-768-v2-1": client.StabilityInference(
+                key = os.environ.get('STABILITY_API_KEY'),
+                engine='stable-diffusion-768-v2-1',
+                verbose=True
+            ),
+            "stable-inpainting-512-v2-0": client.StabilityInference(
+                key = os.environ.get('STABILITY_API_KEY'),
+                engine='stable-inpainting-512-v2-0',
+                verbose=True
+            ),
+
+        }
 
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Generate an image from a prompt")
@@ -30,12 +53,9 @@ class Imagine(commands.Cog):
 
         await ctx.defer()
 
-        self.stability_api = client.StabilityInference(
-            key= os.environ.get('STABILITY_API_KEY'),
-            engine=engine
-        )
 
-        images = self.stability_api.generate(
+
+        images = self.stability_api[engine].generate(
             prompt=prompt,
             engine=engine,
             steps=30,
@@ -43,7 +63,6 @@ class Imagine(commands.Cog):
             width=512,
             height=512,
             samples=4,
-            verbose=True,
         )
 
         files = []
