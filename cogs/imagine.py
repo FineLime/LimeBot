@@ -11,9 +11,9 @@ from stuff.patreon_only import tangerine_only
 from discord import Option
 
 engines = [ 
-    'stable-diffusion-v1-5',
-    'stable-diffusion-512-v2-1',
-    'stable-diffusion-768-v2-1',
+    'stable-diffusion-v1-5', # Costs: 0.2 credits per image
+    'stable-diffusion-512-v2-1', # Costs: 0.2 credits per image
+    'stable-diffusion-768-v2-1', 
     'stable-inpainting-512-v2-0',
 ]
 
@@ -36,6 +36,7 @@ class Imagine(commands.Cog):
         await ctx.defer()
         images = self.stability_api.generate(
             prompt=prompt,
+            engine=engine,
             steps=30,
             cfg_scale=8.0,
             width=512,
