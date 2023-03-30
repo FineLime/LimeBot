@@ -8,7 +8,7 @@ from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 import aiohttp
 from stuff.patreon_only import tangerine_only
-from discord.ext.commands import Option
+from discord import Option
 
 engines = [ 
     'stable-diffusion-v1-5',
