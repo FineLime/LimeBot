@@ -13,9 +13,199 @@ from discord import Option
 engines = [ 
     'stable-diffusion-v1-5', # Costs: 0.2 credits per image
     'stable-diffusion-512-v2-1', # Costs: 0.2 credits per image
-    'stable-diffusion-768-v2-1', 
-    'stable-inpainting-512-v2-0',
+    'stable-diffusion-768-v2-1', # Costs: 0.2 credits per image
 ]
+
+class ImagineView(discord.ui.View):
+
+    def __init__(self, bot, prompt, user): 
+        self.bot = bot
+        self.prompt = prompt
+        self.user = user
+        super().__init__()
+
+    @discord.ui.select( 
+        placeholder="Regenerate",
+        min_values=1,
+        max_values=1,
+        options=[
+            discord.SelectOption(label="stable-diffusion-v1-5"),
+            discord.SelectOption(label="stable-diffusion-512-v2-1"),
+            discord.SelectOption(label="stable-diffusion-768-v2-1"),
+        ]
+    )
+    async def regenerate(self, select: discord.ui.Select, interaction: discord.Interaction):
+        
+        engine = select.values[0]
+        await interaction.response.defer()
+        images = self.bot.stability_api[engine].generate(
+            prompt=self.prompt,  
+            steps=30,
+            cfg_scale=8.0,
+            width=512,
+            height=512,
+            samples=3,
+        )
+
+        files = []
+        for resp in images: 
+            for artifact in resp.artifacts:
+                if artifact.type == generation.ARTIFACT_IMAGE:
+                    image_bytes = io.BytesIO(artifact.binary)
+                    files.append(discord.File(image_bytes, filename='image.png'))
+            
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+
+    @discord.ui.select(
+        placeholder="Variations 1",
+        min_values=1,
+        max_values=1,
+        options=[
+            discord.SelectOption(label="stable-diffusion-v1-5"),
+            discord.SelectOption(label="stable-diffusion-512-v2-1"),
+            discord.SelectOption(label="stable-diffusion-768-v2-1"),
+        ]
+    )
+    async def variations_1(self, select: discord.ui.Select, interaction: discord.Interaction):
+
+        engine = select.values[0]
+        await interaction.response.defer()
+        original_image = interaction.message.attachements[0].url    
+        images = self.bot.stability_api[engine].generate(
+            prompt=self.prompt,
+            init_image=original_image,
+            start_schedule=0.5,
+            steps=30,
+            cfg_scale=8.0,
+            width=512,
+            height=512,
+            samples=3,
+        )
+
+        files = []
+        for resp in images:
+            for artifact in resp.artifacts:
+                if artifact.type == generation.ARTIFACT_IMAGE:
+                    image_bytes = io.BytesIO(artifact.binary)
+                    files.append(discord.File(image_bytes, filename='image.png'))
+
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+
+    @discord.ui.select(
+        placeholder="Variations 2",
+        min_values=1,
+        max_values=1,
+        options=[
+            discord.SelectOption(label="stable-diffusion-v1-5"),
+            discord.SelectOption(label="stable-diffusion-512-v2-1"),
+            discord.SelectOption(label="stable-diffusion-768-v2-1"),
+        ]
+    )
+    async def variations_2(self, select: discord.ui.Select, interaction: discord.Interaction):
+            
+            engine = select.values[0]
+            await interaction.response.defer()
+            original_image = interaction.message.attachements[0].url    
+            images = self.bot.stability_api[engine].generate(
+                prompt=self.prompt,
+                init_image=original_image,
+                start_schedule=0.5,
+                steps=30,
+                cfg_scale=8.0,
+                width=512,
+                height=512,
+                samples=3,
+            )
+    
+            files = []
+            for resp in images:
+                for artifact in resp.artifacts:
+                    if artifact.type == generation.ARTIFACT_IMAGE:
+                        image_bytes = io.BytesIO(artifact.binary)
+                        files.append(discord.File(image_bytes, filename='image.png'))
+    
+            await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+
+    @discord.ui.select(
+        placeholder="Variations 3",
+        min_values=1,
+        max_values=1,
+        options=[
+            discord.SelectOption(label="stable-diffusion-v1-5"),
+            discord.SelectOption(label="stable-diffusion-512-v2-1"),
+            discord.SelectOption(label="stable-diffusion-768-v2-1"),
+        ]
+    )
+    async def variations_3(self, select: discord.ui.Select, interaction: discord.Interaction):
+
+        engine = select.values[0]
+        await interaction.response.defer()
+        original_image = interaction.message.attachements[0].url    
+        images = self.bot.stability_api[engine].generate(
+            prompt=self.prompt,
+            init_image=original_image,
+            start_schedule=0.5,
+            steps=30,
+            cfg_scale=8.0,
+            width=512,
+            height=512,
+            samples=3,
+        )
+
+        files = []
+        for resp in images:
+            for artifact in resp.artifacts:
+                if artifact.type == generation.ARTIFACT_IMAGE:
+                    image_bytes = io.BytesIO(artifact.binary)
+                    files.append(discord.File(image_bytes, filename='image.png'))
+
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+
+    @discord.ui.select(
+        placeholder="Variations 4",
+        min_values=1,
+        max_values=1,
+        options=[
+            discord.SelectOption(label="stable-diffusion-v1-5"),
+            discord.SelectOption(label="stable-diffusion-512-v2-1"),
+            discord.SelectOption(label="stable-diffusion-768-v2-1"),
+        ]
+    )
+    async def variations_4(self, select: discord.ui.Select, interaction: discord.Interaction):
+            
+        engine = select.values[0]
+        await interaction.response.defer()
+        original_image = interaction.message.attachements[0].url    
+        images = self.bot.stability_api[engine].generate(
+            prompt=self.prompt,
+            init_image=original_image,
+            start_schedule=0.5,
+            steps=30,
+            cfg_scale=8.0,
+            width=512,
+            height=512,
+            samples=3,  
+        )
+
+        files = []
+        for resp in images:
+            for artifact in resp.artifacts:
+                if artifact.type == generation.ARTIFACT_IMAGE:
+                    image_bytes = io.BytesIO(artifact.binary)
+                    files.append(discord.File(image_bytes, filename='image.png'))
+
+        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user))
+
+    async def interaction_check(self, interaction: discord.Interaction):
+            
+        if interaction.user.id == self.user.id:
+            return True
+        else:
+            await interaction.response.send_message("You can't use this view", ephemeral=True)
+            return False    
+
+
+
 
 class Imagine(commands.Cog):
 
@@ -39,11 +229,6 @@ class Imagine(commands.Cog):
                 engine='stable-diffusion-768-v2-1',
                 verbose=True
             ),
-            "stable-inpainting-512-v2-0": client.StabilityInference(
-                key = os.environ.get('STABILITY_API_KEY'),
-                engine='stable-inpainting-512-v2-0',
-                verbose=True
-            ),
 
         }
 
@@ -56,12 +241,12 @@ class Imagine(commands.Cog):
 
 
         images = self.stability_api[engine].generate(
-            prompt=prompt,
+            prompt=prompt,  
             steps=30,
             cfg_scale=8.0,
             width=512,
             height=512,
-            samples=4,
+            samples=3,
         )
 
         files = []
