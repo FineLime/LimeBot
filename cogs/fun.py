@@ -1,7 +1,7 @@
 import discord 
 from discord.ext import commands
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import asyncio
 
@@ -108,7 +108,9 @@ class Fun(commands.Cog):
                 msg += f"Honestly, you're kind of a liability, you can join back in next round, I'm not reviving you."
 
             await ctx.respond(msg)
-            await ctx.author.timeout_for(timeout_time * 60)
+
+            duration = timedelta(minutes=timeout_time)
+            await ctx.author.timeout_for(duration=duration, reason="UwU")
 
         else:
             msg += f"**\*\*CLICK\*\***, you're alive, {random.choice(['luckily', 'unfortunately', 'for now...', 'unless we just live in a simulation, then are we actually alive to begin with?', 'UwU', 'thank the lord', 'now do it again'])}."
