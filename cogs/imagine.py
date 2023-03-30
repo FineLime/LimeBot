@@ -57,50 +57,6 @@ class ImagineView(discord.ui.View):
             
         await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
 
-    @discord.ui.select(
-        placeholder="Variations",
-        min_values=1,
-        max_values=1,
-        options=[
-            discord.SelectOption(label="1 - stable-diffusion-v1-5"),
-            discord.SelectOption(label="1 - stable-diffusion-512-v2-1"),
-            discord.SelectOption(label="1 - stable-diffusion-768-v2-1"),
-            discord.SelectOption(label="2 - stable-diffusion-v1-5"),
-            discord.SelectOption(label="2 - stable-diffusion-512-v2-1"),
-            discord.SelectOption(label="2 - stable-diffusion-768-v2-1"),
-            discord.SelectOption(label="3 - stable-diffusion-v1-5"),
-            discord.SelectOption(label="3 - stable-diffusion-512-v2-1"),
-            discord.SelectOption(label="3 - stable-diffusion-768-v2-1"),
-            discord.SelectOption(label="4 - stable-diffusion-v1-5"),
-            discord.SelectOption(label="4 - stable-diffusion-512-v2-1"),
-            discord.SelectOption(label="4 - stable-diffusion-768-v2-1"),
-        ]
-    )
-    async def variations(self, select: discord.ui.Select, interaction: discord.Interaction):
-
-        engine = select.values[0].split(" - ")[1]
-        init_image = interaction.response.attachments[int(select.values[0].split(" - ")[0]) - 1 ].url 
-        await interaction.response.defer()
-        images = self.stability_api[engine].generate(
-            prompt=self.prompt,
-            init_image=init_image,
-            start_schedule=0.5,
-            steps=30,
-            cfg_scale=8.0,
-            width=512,
-            height=512,
-            samples=4,
-        )
-
-        files = []
-        for resp in images:
-            for artifact in resp.artifacts:
-                if artifact.type == generation.ARTIFACT_IMAGE:
-                    image_bytes = io.BytesIO(artifact.binary)
-                    files.append(discord.File(image_bytes, filename='image.png'))
-
-        await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
-
     async def interaction_check(self, interaction: discord.Interaction):
 
         if interaction.user.id == self.user:
