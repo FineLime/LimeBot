@@ -126,7 +126,7 @@ class Imagine(commands.Cog):
             await ctx.respond("This command is only available to Tangerine Patrons.\nYou can become a patron at https://www.patreon.com/FineLime\n\nIf you are a patron, please make sure you have linked your Discord account to your Patreon account and have waited at least 5 minutes for the cache to update.", ephemeral=True)
 
     
-    @tangerine_only
+    @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Create variations of an image")
     async def variations(self, ctx, image: discord.File, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"): 
 
