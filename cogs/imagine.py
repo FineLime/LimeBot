@@ -101,6 +101,13 @@ class ImagineView(discord.ui.View):
 
         await interaction.followup.send(files=files, view=ImagineView(self.bot, self.prompt, self.user, self.stability_api))
 
+    async def interaction_check(self, interaction: discord.Interaction):
+
+        if interaction.user.id == self.user:
+            return True
+        else:
+            await interaction.response.send_message("You are not the owner of this interaction", ephemeral=True)
+            return False
 
 
 
