@@ -237,7 +237,7 @@ class Imagine(commands.Cog):
     async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"):
 
         await ctx.defer()
-
+        
 
 
         images = self.stability_api[engine].generate(
@@ -256,7 +256,7 @@ class Imagine(commands.Cog):
                     image_bytes = io.BytesIO(artifact.binary)
                     files.append(discord.File(image_bytes, filename='image.png'))
             
-        await ctx.followup.send(f"**{prompt}**", files=files)
+        await ctx.followup.send(f"**{prompt}**", files=files, view=ImagineView(self.bot, prompt, ctx.author.id))
 
     @imagine.error
     async def imagine_error(self, ctx, error):
