@@ -24,16 +24,17 @@ class Imagine(commands.Cog):
         self.bot = bot
         os.environ["STABILITY_HOST"] = 'grpc.stability.ai:443'
 
-        self.stability_api = client.StabilityInference(
-            key= os.environ.get('STABILITY_API_KEY'),
-            engine='stable-diffusion-v1-5'
-        )
-
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Generate an image from a prompt")
     async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"):
 
         await ctx.defer()
+
+        self.stability_api = client.StabilityInference(
+            key= os.environ.get('STABILITY_API_KEY'),
+            engine=engine
+        )
+
         images = self.stability_api.generate(
             prompt=prompt,
             engine=engine,
@@ -42,6 +43,7 @@ class Imagine(commands.Cog):
             width=512,
             height=512,
             samples=4,
+            verbose=True,
         )
 
         files = []
