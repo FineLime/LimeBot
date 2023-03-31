@@ -112,18 +112,19 @@ class Imagine(commands.Cog):
         # Grapefruit up to 75 steps
         # Lemons up to 150 steps
 
+        await ctx.defer()
+
         tier = await get_patreon_tier(self.bot, ctx.author.id)
         if tier == 0 and steps > 30:
-            await ctx.respond("Tangerines can only generate up to 30 steps. Subscribe to Grapefruit to generate up to 75 steps, or Lemon to generate up to 150 steps.", ephemeral=True)
+            await ctx.followup.send("Tangerines can only generate up to 30 steps. Subscribe to Grapefruit to generate up to 75 steps or Lemon to generate up to 150 steps.", ephemeral=True)
             return
         elif tier == 1 and steps > 75:
-            await ctx.respond("Grapefruits can only generate up to 75 steps. Subscribe to Lemon to generate up to 150 steps.", ephemeral=True)
+            await ctx.followup.send("Grapefruit can only generate up to 75 steps. Subscribe to Lemon to generate up to 150 steps.", ephemeral=True)
             return
         elif tier == 2 and steps > 150:
-            await ctx.respond("150 steps is the maximum amount of steps you can generate.", ephemeral=True)
+            await ctx.followup.send("Lemons can only generate up to 150 steps.", ephemeral=True)
             return
 
-        await ctx.defer()
 
         images = self.stability_api[engine].generate(
             prompt=prompt,  
