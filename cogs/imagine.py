@@ -14,6 +14,7 @@ engines = [
     'stable-diffusion-v1-5', # Costs: 0.2 credits per image
     'stable-diffusion-512-v2-1', # Costs: 0.2 credits per image
     'stable-diffusion-768-v2-1', # Costs: 0.2 credits per image
+    'stable-diffusion-xl-beta-v2-2-2'
 ]
 
 class ImagineView(discord.ui.View):
@@ -33,6 +34,7 @@ class ImagineView(discord.ui.View):
             discord.SelectOption(label="stable-diffusion-v1-5"),
             discord.SelectOption(label="stable-diffusion-512-v2-1"),
             discord.SelectOption(label="stable-diffusion-768-v2-1"),
+            discord.SelectOption(label="stable-diffusion-xl-beta-v2-2-2")
         ]
     )
     async def regenerate(self, select: discord.ui.Select, interaction: discord.Interaction):
@@ -90,6 +92,11 @@ class Imagine(commands.Cog):
                 engine='stable-diffusion-768-v2-1',
                 verbose=True
             ),
+            "stable-diffusion-xl-beta-v2-2-2": client.StabilityInference(
+                key = os.environ.get('STABILITY_API_KEY'),
+                engine='stable-diffusion-xl-beta-v2-2-2',
+                verbose=True
+            )
 
         }
 
