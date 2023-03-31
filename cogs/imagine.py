@@ -114,7 +114,7 @@ class Imagine(commands.Cog):
 
         await ctx.defer()
 
-        tier = await get_patreon_tier(self.bot, ctx.author.id)
+        tier = get_patreon_tier(self.bot, ctx.author.id)
         if tier == 0 and steps > 30:
             await ctx.followup.send("Tangerines can only generate up to 30 steps. Subscribe to Grapefruit to generate up to 75 steps or Lemon to generate up to 150 steps.", ephemeral=True)
             return
