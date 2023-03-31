@@ -7,7 +7,7 @@ from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 import aiohttp
-from stuff.patreon_only import tangerine_only
+from stuff.patreon_only import tangerine_only, get_patreon_tier
 from discord import Option
 
 engines = [ 
@@ -102,11 +102,28 @@ class Imagine(commands.Cog):
 
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Generate an image from a prompt")
-    async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"):
+    async def imagine(self, ctx, prompt: str, steps: int = 30, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"):
+
+        if steps < 10: 
+            await ctx.respond("You must generate at least 10 steps.", ephemeral=True)
+            return
+
+        # Tangerines up to 30 steps
+        # Grapefruit up to 75 steps
+        # Lemons up to 150 steps
+
+        tier = await get_patreon_tier(self.bot, ctx.author.id)
+        if tier == 0 and steps > 30:
+            await ctx.respond("Tangerines can only generate up to 30 steps. Subscribe to Grapefruit to generate up to 75 steps, or Lemon to generate up to 150 steps.", ephemeral=True)
+            return
+        elif tier == 1 and steps > 75:
+            await ctx.respond("Grapefruits can only generate up to 75 steps. Subscribe to Lemon to generate up to 150 steps.", ephemeral=True)
+            return
+        elif tier == 2 and steps > 150:
+            await ctx.respond("150 steps is the maximum amount of steps you can generate.", ephemeral=True)
+            return
 
         await ctx.defer()
-
-
 
         images = self.stability_api[engine].generate(
             prompt=prompt,  

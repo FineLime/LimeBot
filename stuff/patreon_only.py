@@ -42,6 +42,25 @@ def get_patreon_title(patron_id):
 
     return tier_id
 
+def get_patreon_tier(discord_id): 
+
+    if str(discord_id) in cool_people:
+        return len(tiers) - 1
+
+    patrons = get_patreon_users()
+    patron = [patron for patron in patrons['included'] if patron['type'] == 'user' and patron['attributes']['social_connections']['discord']['user_id'] == str(discord_id)]
+
+    if len(patron) == 0:
+        return None
+    
+    patron = patron[0]  
+    tier_id = get_patreon_title(patron['id'])
+
+    if tier_id is None:
+        return None
+    
+    return tiers.index(tier_id)
+
     
 # Wrappers for patron only commands
 
