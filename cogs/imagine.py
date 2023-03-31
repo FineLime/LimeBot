@@ -128,7 +128,7 @@ class Imagine(commands.Cog):
 
         images = self.stability_api[engine].generate(
             prompt=prompt,  
-            steps=30,
+            steps=steps,
             cfg_scale=8.0,
             width=512,
             height=512,
