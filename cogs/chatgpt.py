@@ -12,7 +12,7 @@ openai.api_key = os.environ.get('OPENAI_API_KEY')
 ais = { 
     "Karen": "You will rudely, aggressively, and sarcastically answer questions given.",
     "Troll": "You will incorrectly answer questions given.",
-    "lmgtfy": "You will respond with a link to letmegooglethatforyou.com with the query paramater 'q' which is the question given and shortned if needed.\n\nExample:\nUser: What is the meaning of life?\nBot: https://letmegooglethatforyou.com/?q=What+is+the+meaning+of+life",
+    "lmgtfy": "You will respond with a link to letmegooglethat.com with the query paramater 'q' which is the question given and shortned if needed.\n\nExamples:\nUser: What is the meaning of life?\nBot: https://letmegooglethat.com/?q=What+is+the+meaning+of+life\n\nUser: I am getting an error 0a23defa0a2 when I run microsoft paint\nBot: https://letmegooglthat.com/?q=microsoft+paint+error+0a23defa0a2",
 }
 
 class ChatGPT(commands.Cog):
