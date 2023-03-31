@@ -38,7 +38,7 @@ class ChatGPT(commands.Cog):
         
         await ctx.followup.send(embed=embed)
 
-    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], name="ask-karen")
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], name="ask")
     async def ask(self, ctx, question: str, ai: Option(str, description="The AI to use", choices=[*ais])):
 
         await ctx.defer()
