@@ -78,6 +78,26 @@ class ChatGPT(commands.Cog):
 
         await ctx.followup.send(embed=embed)
 
+    @lemon_only()
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def ask_gpt4(self, ctx, ai: Option(str, description="The AI to use", choices=[*ais]), prompt: str):
+
+        await ctx.defer()
+
+        response = openai.ChatCompletion.create(
+            model = "gpt-4",
+            messages = [
+                {"role": "system", "content": ais[ai]},
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        answer = response["choices"][0]["message"]["content"]
+        title = prompt if len(prompt) < 200 else prompt[:200] + "..."
+        embed = discord.Embed(title=title, description=answer, color=discord.Color.blurple())
+
+        await ctx.followup.send(embed=embed)
+
     @gpt4.error
     async def gpt4_error(self, ctx, error):
         if error.__class__.__name__ == "CheckFailure":
