@@ -11,10 +11,9 @@ from stuff.patreon_only import tangerine_only, get_patreon_tier
 from discord import Option
 
 engines = [ 
-    'stable-diffusion-v1-5', # Costs: 0.2 credits per image
-    'stable-diffusion-512-v2-1', # Costs: 0.2 credits per image
-    'stable-diffusion-768-v2-1', # Costs: 0.2 credits per image
-    'stable-diffusion-xl-beta-v2-2-2'
+    'v1.5',
+    'v2.1',
+    'sdxl'
 ]
 
 class ImagineView(discord.ui.View):
@@ -31,10 +30,9 @@ class ImagineView(discord.ui.View):
         min_values=1,
         max_values=1,
         options=[
-            discord.SelectOption(label="stable-diffusion-v1-5"),
-            discord.SelectOption(label="stable-diffusion-512-v2-1"),
-            discord.SelectOption(label="stable-diffusion-768-v2-1"),
-            discord.SelectOption(label="stable-diffusion-xl-beta-v2-2-2")
+            discord.SelectOption(label="v1.5", value="v1.5"),
+            discord.SelectOption(label="v2.1", value="v2.1"),
+            discord.SelectOption(label="sdxl", value="sdxl")
         ]
     )
     async def regenerate(self, select: discord.ui.Select, interaction: discord.Interaction):
@@ -77,22 +75,17 @@ class Imagine(commands.Cog):
         self.bot = bot
         os.environ["STABILITY_HOST"] = 'grpc.stability.ai:443'
         self.stability_api = { 
-            "stable-diffusion-v1-5": client.StabilityInference(
+            "v1.5": client.StabilityInference(
                 key = os.environ.get('STABILITY_API_KEY'),
                 engine='stable-diffusion-v1-5',
                 verbose=True
             ),
-            "stable-diffusion-512-v2-1": client.StabilityInference(
+            "v2.1": client.StabilityInference(
                 key = os.environ.get('STABILITY_API_KEY'),
                 engine='stable-diffusion-512-v2-1',
                 verbose=True
             ),
-            "stable-diffusion-768-v2-1": client.StabilityInference(
-                key = os.environ.get('STABILITY_API_KEY'),
-                engine='stable-diffusion-768-v2-1',
-                verbose=True
-            ),
-            "stable-diffusion-xl-beta-v2-2-2": client.StabilityInference(
+            "sdxl": client.StabilityInference(
                 key = os.environ.get('STABILITY_API_KEY'),
                 engine='stable-diffusion-xl-beta-v2-2-2',
                 verbose=True
@@ -107,10 +100,6 @@ class Imagine(commands.Cog):
         if steps < 10: 
             await ctx.respond("You must generate at least 10 steps.", ephemeral=True)
             return
-
-        # Tangerines up to 30 steps
-        # Grapefruit up to 75 steps
-        # Lemons up to 150 steps
 
         await ctx.defer()
 
