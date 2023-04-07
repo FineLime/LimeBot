@@ -95,7 +95,7 @@ class Imagine(commands.Cog):
 
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Generate an image from a prompt")
-    async def imagine(self, ctx, prompt: str, steps: int = 30, engine: Option(str, description="The engine to use", choices=engines, required=False) = "stable-diffusion-v1-5"):
+    async def imagine(self, ctx, prompt: str, steps: int = 30, engine: Option(str, description="The engine to use", choices=engines, required=False) = "v1.5"):
 
         if steps < 10: 
             await ctx.respond("You must generate at least 10 steps.", ephemeral=True)
