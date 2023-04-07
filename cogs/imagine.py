@@ -95,7 +95,7 @@ class Imagine(commands.Cog):
 
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Generate an image from a prompt")
-    async def imagine(self, ctx, prompt: str, steps: int = 30, engine: Option(str, description="The engine to use", choices=engines, required=False) = "v1.5"):
+    async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "v1.5", steps: int = 30):
 
         if steps < 10: 
             await ctx.respond("You must generate at least 10 steps.", ephemeral=True)
@@ -111,7 +111,7 @@ class Imagine(commands.Cog):
             await ctx.followup.send("Grapefruit can only generate up to 75 steps. Subscribe to Lemon to generate up to 150 steps.", ephemeral=True)
             return
         elif tier == 2 and steps > 150:
-            await ctx.followup.send("Lemons can only generate up to 150 steps.", ephemeral=True)
+            await ctx.followup.send("150 is the maximum amount of steps.", ephemeral=True)
             return
 
 
