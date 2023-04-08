@@ -3,6 +3,7 @@ from discord.ext import commands
 import random
 import math
 import datetime
+from discord import Option
 
 class Currency(commands.Cog): 
 
@@ -166,8 +167,31 @@ class Currency(commands.Cog):
             await self.bot.db.execute("UPDATE controlpanel_member SET coins = $1 WHERE member_id = $2 and guild_id = $3", result['coins'] - bet, ctx.author.id, ctx.guild.id)
 
         embed = discord.Embed(title=f"{ctx.author.name}'s slots", description=description, color=discord.Color.blurple())
-        await ctx.respond(embed=embed)
+        await ctx.respond(embed=embed)#
 
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def coinflip(self, ctx, guess: Option(str, description="Heads or Tails", choices=["heads", "tails"]), bet: int = None):
+        
+        member = await self.bot.db.fetchrow("SELECT * FROM controlpanel_member WHERE member_id = $1 and guild_id = $2", ctx.author.id, ctx.guild.id)
+
+        if bet: 
+            if bet < 1:
+                await ctx.respond("You can't bet less than 1 coin", ephemeral=True)
+                return
+            elif bet > member['coins']:
+                await ctx.respond("You don't have enough coins", ephemeral=True)
+                return
+        
+        flip = random.choice(["heads", "tails"])
+
+        if guess == flip:
+            await self.bot.db.execute("UPDATE controlpanel_member SET coins = $1 WHERE member_id = $2 and guild_id = $3", member['coins'] + bet, ctx.author.id, ctx.guild.id)
+            await ctx.respond(f"I flipped {flip}, you won {bet} coins")
+
+        else:
+            await self.bot.db.execute("UPDATE controlpanel_member SET coins = $1 WHERE member_id = $2 and guild_id = $3", member['coins'] - bet, ctx.author.id, ctx.guild.id)
+            await ctx.respond(f"I flipped {flip}, you lost {bet} coins")
+            
 
     @commands.Cog.listener()
     async def on_message(self, message):
