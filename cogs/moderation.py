@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions, MissingPermissions
-from discord import default_permissions
+from discord import default_permissions, Option
+from datetime import datetime, timedelta
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
@@ -94,6 +95,29 @@ class Moderation(commands.Cog):
         
         await user.send(f"You have been warned in {ctx.guild.name} for {reason}.")
         await ctx.respond(f"Warned {user.name}.")
+
+    @has_permissions(manage_messages=True)
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def timeout(self, ctx, user: discord.Member, duration: int, measurement: Option(str, choices=["minutes", "hours", "days"], default="minutes"), reason: str = None):
+
+        if user.top_role >= ctx.author.top_role:
+            await ctx.respond("You cannot timeout this user.")
+            return
+        
+        match measurement:
+            case "minutes":
+                time = timedelta(minutes=duration)
+            case "hours":
+                time = timedelta(hours=duration)
+            case "days":
+                time = timedelta(days=duration)
+            case _:
+                print("HOW?!")
+                await ctx.respond("Something went wrong.")
+                return  
+
+        await user.timeout_for(time, reason=reason)
+        await ctx.respond(f"Timed out {user.name} for {duration} minutes.", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
