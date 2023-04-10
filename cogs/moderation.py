@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions, MissingPermissions
+from discord import default_permissions
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
@@ -61,7 +62,7 @@ class Moderation(commands.Cog):
                     banned.append(message.author)
         await ctx.respond(f"Deleted {deleted} messages and banned {len(banned)} users.")
 
-    @has_permissions(ban_members=True)
+    @default_permissions(ban_members=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def ban(self, ctx, user: discord.Member, reason: str = None):
         
