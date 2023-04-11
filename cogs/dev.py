@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import default_permissions
 
 def is_dev():
     def predicate(ctx):
@@ -12,6 +13,11 @@ class Dev(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @default_permissions(manage_guild=True)
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def hi(self, ctx):
+        await ctx.respond("Hello!")
 
     @is_dev()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
@@ -70,6 +76,8 @@ class Dev(commands.Cog):
             return
         
         await ctx.respond(f"{result}", ephemeral=True)
+
+    
         
 
 def setup(bot):
