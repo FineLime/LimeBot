@@ -63,7 +63,7 @@ class Moderation(commands.Cog):
                     banned.append(message.author)
         await ctx.respond(f"Deleted {deleted} messages and banned {len(banned)} users.")
 
-    @default_permissions(ban_members=True)
+    @has_permissions(ban_members=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def ban(self, ctx, user: discord.Member, reason: str = None):
         

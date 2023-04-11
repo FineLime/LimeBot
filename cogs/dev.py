@@ -20,6 +20,11 @@ class Dev(commands.Cog):
 
     @is_dev()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def server_list(self, ctx):
+        await ctx.respond(f"Server List: {', '.join([guild.name for guild in self.bot.guilds])}")
+
+    @is_dev()
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def eval(self, ctx, *, code):
         code = code.strip("` ").split("python\n")[1]
         try:
