@@ -1,8 +1,12 @@
 import discord
 from discord.ext import commands
 
-def is_dev(ctx):
-    return str(ctx.author.id) in ["348538644887240716"]
+def is_dev():
+    def predicate(ctx):
+        if str(ctx.author.id) in ["348538644887240716"]:
+            return True
+        return False
+    return commands.check(predicate)
 
 class Dev(commands.Cog):
 
