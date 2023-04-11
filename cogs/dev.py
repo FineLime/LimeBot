@@ -49,6 +49,18 @@ class Dev(commands.Cog):
 
     @is_dev()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def return_eval(self, ctx, *, code):
+        code = code.strip("` ")
+        try:
+            result = exec(code)
+        except Exception as e:
+            await ctx.respond(f"```py\n{e}```", ephemeral=True)
+            return
+        
+        await ctx.respond(f"{result}", ephemeral=True)
+
+    @is_dev()
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def return_aeval(self, ctx, *, code):
         code = code.strip("` ")
         try:
