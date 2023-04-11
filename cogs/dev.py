@@ -52,7 +52,7 @@ class Dev(commands.Cog):
     async def return_eval(self, ctx, *, code):
         code = code.strip("` ")
         try:
-            result = exec(code)
+            result = eval(code)
         except Exception as e:
             await ctx.respond(f"```py\n{e}```", ephemeral=True)
             return
