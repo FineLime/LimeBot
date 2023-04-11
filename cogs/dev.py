@@ -26,7 +26,7 @@ class Dev(commands.Cog):
     @is_dev()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def eval(self, ctx, *, code):
-        code = code.strip("` ").split("python\n")[1]
+        code = code.strip("` ")
         try:
             exec(code)
         except Exception as e:
@@ -38,7 +38,7 @@ class Dev(commands.Cog):
     @is_dev()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def aeval(self, ctx, *, code):
-        code = code.strip("` ").split("python\n")[1]
+        code = code.strip("` ")
         try:
             await exec(code)
         except Exception as e:
@@ -50,7 +50,7 @@ class Dev(commands.Cog):
     @is_dev()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
     async def return_aeval(self, ctx, *, code):
-        code = code.strip("` ").split("python\n")[1]
+        code = code.strip("` ")
         try:
             result = await exec(code)
         except Exception as e:
