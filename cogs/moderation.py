@@ -8,15 +8,14 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @has_permissions(manage_messages=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_messages=True)
     async def purge(self, ctx, amount: int):
         await ctx.respond(f"Purging {amount} messages...", ephemeral=True)
         await ctx.channel.purge(limit=amount)
 
-
-    @has_permissions(manage_messages=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_messages=True)
     async def purge_match(self, ctx, amount: int, *, match):
         deleted = 0
         async for message in ctx.channel.history(limit=amount):
@@ -25,8 +24,8 @@ class Moderation(commands.Cog):
                 deleted += 1
         await ctx.respond(f"Deleted {deleted} messages.")
 
-    @has_permissions(manage_messages=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_messages=True)
     async def purge_user(self, ctx, amount: int, user: discord.Member):
         deleted = 0
         async for message in ctx.channel.history(limit=amount):
@@ -35,8 +34,8 @@ class Moderation(commands.Cog):
                 deleted += 1
         await ctx.respond(f"Deleted {deleted} messages.")
 
-    @has_permissions(manage_messages=True, kick_members=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_messages=True, kick_members=True)
     async def purge_kick_match(self, ctx, amount: int, match: str): 
         deleted = 0
         kicked = []
@@ -49,8 +48,8 @@ class Moderation(commands.Cog):
                     kicked.append(message.author)
         await ctx.respond(f"Deleted {deleted} messages and kicked {len(kicked)} users.")
 
-    @has_permissions(manage_messages=True, ban_members=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_messages=True, ban_members=True)
     async def purge_ban_match(self, ctx, amount: int, match: str):
         deleted = 0
         banned = []
@@ -63,8 +62,8 @@ class Moderation(commands.Cog):
                     banned.append(message.author)
         await ctx.respond(f"Deleted {deleted} messages and banned {len(banned)} users.")
 
-    @has_permissions(ban_members=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(ban_members=True)
     async def ban(self, ctx, user: discord.Member, reason: str = None):
         
         if user.top_role >= ctx.author.top_role:
@@ -74,8 +73,8 @@ class Moderation(commands.Cog):
         await user.ban(reason=reason)
         await ctx.respond(f"Banned {user.name}.")
 
-    @has_permissions(kick_members=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(kick_members=True)
     async def kick(self, ctx, user: discord.Member, reason: str = None):
             
         if user.top_role >= ctx.author.top_role:
@@ -85,8 +84,8 @@ class Moderation(commands.Cog):
         await user.kick(reason=reason)
         await ctx.respond(f"Kicked {user.name}.")
 
-    @has_permissions(manage_messages=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_messages=True)
     async def warn(self, ctx, user: discord.Member, reason: str = None): 
 
         if user.top_role >= ctx.author.top_role:
@@ -96,9 +95,9 @@ class Moderation(commands.Cog):
         await user.send(f"You have been warned in {ctx.guild.name} for {reason}.")
         await ctx.respond(f"Warned {user.name}.")
 
-    @has_permissions(manage_messages=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
-    async def timeout(self, ctx, user: discord.Member, duration: int, measurement: Option(str, choices=["minutes", "hours", "days"], default="minutes"), reason: str = None):
+    @default_permissions(manage_messages=True)
+    async def timeout(self, ctx, user: discord.Member, duration: int, measurement: Option(str, choices=["minutes", "hours", "days"]), reason: str = None):
 
         if user.top_role >= ctx.author.top_role:
             await ctx.respond("You cannot timeout this user.")

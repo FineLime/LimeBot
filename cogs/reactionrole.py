@@ -1,14 +1,15 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions, MissingPermissions
+from discord import default_permissions
 
 class Reaction(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @has_permissions(manage_roles=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_roles=True)
     async def add_reaction_role(self, ctx, message: discord.Message, role: discord.Role, emoji: str):
 
         data = await self.bot.db.fetch("SELECT role_id, emoji FROM controlpanel_reactionrole WHERE message_id = $1", message.id)
@@ -40,8 +41,8 @@ class Reaction(commands.Cog):
             await self.bot.db.execute("INSERT INTO controlpanel_reactionrole (guild_id, message_id, role_id, emoji) VALUES ($1, $2, $3, $4)", ctx.guild.id, message.id, role.id, str(emoji))
             await ctx.respond("Reaction role created.", ephemeral=True)
 
-    @has_permissions(manage_roles=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_roles=True)
     async def remove_reaction_role(self, ctx, message: discord.Message, role: discord.Role = None, emoji: str = None): 
 
         if not role and not emoji:
@@ -56,8 +57,8 @@ class Reaction(commands.Cog):
             await self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = $1 AND emoji = $2", message.id, emoji)
             await ctx.respond("Reaction role removed.", ephemeral=True)
 
-    @has_permissions(manage_roles=True)
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_roles=True)
     async def clear_reaction_roles(self, ctx, message: discord.Message):
 
         await self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE message_id = $1", message.id)

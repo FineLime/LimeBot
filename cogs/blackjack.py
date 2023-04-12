@@ -51,8 +51,39 @@ class BlackjackView(discord.ui.View):
             await interaction.response.edit_message(embed=discord.Embed(title=f"{interaction.user.name}'s Blackjack", description=description, color=discord.Color.blurple()), view=None)
             return
         
+        if self.player['value'] == 21:
+
+            description += f"Dealer Cards:\n{' '.join(self.dealer['cards'])} ({self.dealer['value']})\n\n"
+            description += f"Your Cards:\n{' '.join(self.player['cards'])} ({self.player['value']})\n\n"
+            
+            while self.dealer['value'] < 17:
+                card = random.choice(self.cards)
+                self.dealer['cards'].append(card)
+                self.dealer['value'] = get_value(self.dealer['cards'])
+                self.cards.remove(card)
+
+            if self.dealer['value'] > 21:
+
+                description += "Dealer busted!"
+                await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
+
+            elif self.dealer['value'] == 21:
+
+                description += "It's a tie!"
+
+            else:
+
+                description += "You won!"
+                await self.bot.db.execute("UPDATE controlpanel_member SET coins = coins + $1 WHERE member_id = $2 and guild_id = $3", self.bet, interaction.user.id, interaction.guild.id)
+                
+            await interaction.response.edit_message(embed=discord.Embed(title=f"{interaction.user.name}'s Blackjack", description=description, color=discord.Color.blurple()), view=None)
+
+
+        
         description += f"Dealer Cards:\n{self.dealer['cards'][0]} 🂠 (?)\n\n"
         description += f"Your Cards:\n{' '.join(self.player['cards'])} ({self.player['value']})\n\n"
+
+        self.children.pop(2)
         
         await interaction.response.edit_message(embed=discord.Embed(title=f"{interaction.user.name}'s Blackjack", description=description, color=discord.Color.blurple()), view=self)
 

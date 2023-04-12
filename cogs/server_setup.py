@@ -83,8 +83,8 @@ class Server_Setup(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
 
-        await self.bot.db.execute("INSERT INTO controlpanel_guild (guild_id, access_token, refresh_token, welcome_channel, welcome_message, birthday_channel, birthday_message) VALUES ($1, $2, $3, $4, $5, $6, $7)", guild.id, None, None, None, None, None, None)
-    
+        await self.bot.db.execute("INSERT INTO controlpanel_guild (guild_id, access_token, refresh_token, welcome_channel, welcome_message, welcome_enabled, birthday_channel, birthday_message, logs_channel, logs_enabled, membercount_channel) VALUES ($1, NULL, NULL, NULL, NULL, False, NULL, NULL, NULL, False, NULL)", guild.id)
+
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
             

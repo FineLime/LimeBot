@@ -1,5 +1,6 @@
 import discord 
 from discord.ext import commands
+from discord import default_permissions
 import math
 from datetime import datetime
 from datetime import timedelta
@@ -55,6 +56,7 @@ class Poll(commands.Cog):
         self.bot = bot
 
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    @default_permissions(manage_messages=True)
     async def poll(self, ctx, question: str, hours: int, option1:str, option2:str, option3:str=None, option4:str=None, option5:str=None, option6:str=None, option7:str=None, option8:str=None, option9:str=None, option10:str=None):
 
         options = [option1, option2, option3, option4, option5, option6, option7, option8, option9, option10]

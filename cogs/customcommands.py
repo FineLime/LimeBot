@@ -37,6 +37,17 @@ class CustomCommands(commands.Cog):
 
         await ctx.respond(f"Removed command {command} successfully.")
 
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def customs_list(self, ctx): 
+
+        cmds = await self.bot.db.fetch("SELECT name FROM controlpanel_customcommand WHERE guild_id = $1", ctx.guild.id)
+
+        description = "".join([f"{cmd['name']}\n" for cmd in cmds]) if cmds else "No custom commands"
+
+        embed = discord.Embed(title="Custom Commands", description=description, color=discord.Color.blurple())
+
+        await ctx.respond(embed=embed)
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
