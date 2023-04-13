@@ -15,6 +15,9 @@ class Quotes(commands.Cog):
         #check if any quotes exist
         data = await self.bot.db.fetch("SELECT quote_id FROM controlpanel_quotes WHERE guild_id = $1", ctx.guild.id)
 
+        #Make quote multiline
+        message = message.replace("\\n", "\n")
+
         if not data:
             await self.bot.db.execute("INSERT INTO controlpanel_quotes (guild_id, quote_id, quote) VALUES ($1, 1, $2)", ctx.guild.id, message)
             await ctx.respond("Quote added.")
