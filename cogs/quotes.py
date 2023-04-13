@@ -46,7 +46,8 @@ class Quotes(commands.Cog):
             await ctx.respond("Quote not found.", ephemeral=True)
             return
 
-        await ctx.respond(f"Quote #{quote_id}: {data['quote']}")
+        embed = discord.Embed(title=f"Quote #{quote_id}", description=data['quote'], color=discord.Color.blurple())
+        await ctx.respond(embed=embed)
 
 
 def setup(bot):
