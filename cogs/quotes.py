@@ -44,3 +44,7 @@ class Quotes(commands.Cog):
             return
 
         await ctx.respond(f"Quote #{quote_id}: {data['quote']}")
+
+
+def setup(bot):
+    bot.add_cog(Quotes(bot))
