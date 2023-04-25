@@ -55,10 +55,10 @@ def format_custom_command_response(ctx, response):
             except IndexError:
                 response = "This command requires argument " + arg_number + "."
 
-    # randoms = re.findall(r'\{\$random (.+ \|\| )+.+\}', response)
-    # for random in randoms:
-    #     options = random[9:-1].split(' || ')
-    #     response = response.replace(random, random.choice(options))
+    randoms = re.findall(r'\{\$random ([^|}]+ \|\| )+([^|}])+\}', response)
+    for random in randoms:
+        options = random[9:-1].split(' || ')
+        response = response.replace(random, random.choice(options))
 
     # ifs = re.findall(r'\{\$if [.+] \!?(>|<|=) [.+] \".+\"}', response) 
     # for if_statement in ifs:
