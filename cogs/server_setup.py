@@ -1,6 +1,7 @@
 import discord 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions, MissingPermissions
+from stuff.guilds import get_guild, insert_guild, delete_guild
 
 class Server_Setup(commands.Cog):
 
@@ -66,11 +67,27 @@ class Server_Setup(commands.Cog):
         await self.bot.db.execute("UPDATE controlpanel_guild SET welcome_message = NULL WHERE guild_id = $1", ctx.guild.id)
         await ctx.respond(f"Removed the welcome message.")
 
+    @has_permissions(manage_guild=True)
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def membercount_channel(self, ctx, channel: discord.VoiceChannel):
+
+        await self.bot.db.execute("UPDATE controlpanel_guild SET membercount_channel = $1 WHERE guild_id = $2", channel.id, ctx.guild.id)
+        await ctx.respond(f"Set the membercount channel to {channel.mention}.")
+        await channel.edit(name=f"Members: {ctx.guild.member_count}")
+
+    @has_permissions(manage_guild=True)
+    @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972])
+    async def membercount_remove(self, ctx):
+
+        await self.bot.db.execute("UPDATE controlpanel_guild SET membercount_channel = NULL WHERE guild_id = $1", ctx.guild.id)
+        await ctx.respond(f"Removed the membercount channel.")
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
             
         welcome_data = await self.bot.db.fetchrow("SELECT welcome_channel, welcome_message FROM controlpanel_guild WHERE guild_id = $1", member.guild.id)
         autorole_data = await self.bot.db.fetch("SELECT role_id FROM controlpanel_autorole WHERE guild_id = $1", member.guild.id)
+        membercount_channel = await self.bot.db.fetchrow("SELECT membercount_channel FROM controlpanel_guild WHERE guild_id = $1", member.guild.id)
 
         if welcome_data['welcome_channel'] != None and welcome_data['welcome_message'] != None:
             channel = member.guild.get_channel(welcome_data['welcome_channel'])
@@ -80,19 +97,33 @@ class Server_Setup(commands.Cog):
             roles = [member.guild.get_role(x[0]) for x in autorole_data]
             await member.add_roles(*roles)
 
+        if membercount_channel['membercount_channel'] != None:
+            
+            channel = member.guild.get_channel(membercount_channel['membercount_channel'])
+            await channel.edit(name=f"Members: {member.guild.member_count}")
+
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-
-        await self.bot.db.execute("INSERT INTO controlpanel_guild (guild_id, access_token, refresh_token, welcome_channel, welcome_message, welcome_enabled, birthday_channel, birthday_message, logs_channel, logs_enabled, membercount_channel) VALUES ($1, NULL, NULL, NULL, NULL, False, NULL, NULL, NULL, False, NULL)", guild.id)
+        
+        await insert_guild(self.bot.db, guild.id)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
             
-        await self.bot.db.execute("DELETE FROM controlpanel_guild WHERE guild_id = $1", guild.id)
-        await self.bot.db.execute("DELETE FROM controlpanel_autorole WHERE guild_id = $1", guild.id)
-        await self.bot.db.execute("DELETE FROM controlpanel_birthday WHERE guild_id = $1", guild.id)
-        await self.bot.db.execute("DELETE FROM controlpanel_reactionrole WHERE guild_id = $1", guild.id)
-        await self.bot.db.execute("DELETE FROM controlpanel_reminder WHERE guild_id = $1", guild.id)
+        await delete_guild(self.bot.db, guild.id)
+
+    @tasks.loop(hours=1)
+    async def update_guilds(self): 
+        
+        guilds = await self.bot.db.execute("SELECT guild_id FROM controlpanel_guild").fetchall()
+
+        for guild in guilds:
+            if not self.bot.get_guild(guild['guild_id']):
+                await delete_guild(self.bot.db, guild['guild_id'])
+
+        for guild in self.bot.guilds:
+            if not await self.bot.db.execute("SELECT * FROM controlpanel_guild WHERE guild_id = $1", guild.id).fetchone():
+                await insert_guild(self.bot.db, guild.id)
 
 
 def setup(bot):
