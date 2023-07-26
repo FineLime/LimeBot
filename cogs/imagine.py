@@ -13,7 +13,31 @@ from discord import Option
 engines = [ 
     'v1.5',
     'v2.1',
-    'sdxl'
+    'sdxl-0.9',
+    'sdxl-beta'
+]
+
+# Enum: 3d-model analog-film anime cinematic comic-book digital-art enhance fantasy-art isometric line-art low-poly modeling-compound neon-punk origami photographic pixel-art tile-texture 
+
+styles = [ 
+    '3d-model',
+    'analog-film',
+    'anime',
+    'cinematic',
+    'comic-book',
+    'digital-art',
+    'enhance',
+    'fantasy-art',
+    'isometric',
+    'line-art',
+    'low-poly',
+    'modeling-compound',
+    'neon-punk',
+    'origami',
+    'photographic',
+    'pixel-art',
+    'tile-texture'
+
 ]
 
 class ImagineView(discord.ui.View):
@@ -32,7 +56,8 @@ class ImagineView(discord.ui.View):
         options=[
             discord.SelectOption(label="v1.5", value="v1.5"),
             discord.SelectOption(label="v2.1", value="v2.1"),
-            discord.SelectOption(label="sdxl", value="sdxl")
+            discord.SelectOption(label="sdxl-0.9", value="sdxl-0.9"),
+            discord.SelectOption(label="sdxl-beta", value="sdxl-beta")
         ]
     )
     async def regenerate(self, select: discord.ui.Select, interaction: discord.Interaction):
@@ -85,9 +110,14 @@ class Imagine(commands.Cog):
                 engine='stable-diffusion-512-v2-1',
                 verbose=True
             ),
-            "sdxl": client.StabilityInference(
+            "sdxl-beta": client.StabilityInference(
                 key = os.environ.get('STABILITY_API_KEY'),
                 engine='stable-diffusion-xl-beta-v2-2-2',
+                verbose=True
+            ), 
+            "sdxl-0.9": client.StabilityInference(
+                key = os.environ.get('STABILITY_API_KEY'),
+                engine='stable-diffusion-xl-1024-v0-9',
                 verbose=True
             )
 
@@ -95,7 +125,7 @@ class Imagine(commands.Cog):
 
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Generate an image from a prompt")
-    async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "v1.5", steps: int = 30):
+    async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "v1.5", steps: int = 30, style: Option(str, description="The style to use", choices=styles, required=False) = None):
 
         if steps < 10: 
             await ctx.respond("You must generate at least 10 steps.", ephemeral=True)
@@ -115,6 +145,7 @@ class Imagine(commands.Cog):
             return
 
 
+
         images = self.stability_api[engine].generate(
             prompt=prompt,  
             steps=steps,
@@ -122,6 +153,7 @@ class Imagine(commands.Cog):
             width=512,
             height=512,
             samples=4,
+            style_preset=style
         )
 
         files = []
