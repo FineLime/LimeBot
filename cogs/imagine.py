@@ -152,8 +152,7 @@ class Imagine(commands.Cog):
             cfg_scale=8.0,
             width=512,
             height=512,
-            samples=4,
-            style_preset=style
+            samples=4
         )
 
         files = []
