@@ -14,6 +14,7 @@ engines = [
     'v1.5',
     'v2.1',
     'sdxl-0.9',
+    'sdxl-1.0',
     'sdxl-beta'
 ]
 
@@ -57,7 +58,8 @@ class ImagineView(discord.ui.View):
             discord.SelectOption(label="v1.5", value="v1.5"),
             discord.SelectOption(label="v2.1", value="v2.1"),
             discord.SelectOption(label="sdxl-0.9", value="sdxl-0.9"),
-            discord.SelectOption(label="sdxl-beta", value="sdxl-beta")
+            discord.SelectOption(label="sdxl-1.0", value="sdxl-1.0"),
+            discord.SelectOption(label="sdxl-beta", value="sdxl-beta"), 
         ]
     )
     async def regenerate(self, select: discord.ui.Select, interaction: discord.Interaction):
@@ -118,6 +120,11 @@ class Imagine(commands.Cog):
             "sdxl-0.9": client.StabilityInference(
                 key = os.environ.get('STABILITY_API_KEY'),
                 engine='stable-diffusion-xl-1024-v0-9',
+                verbose=True
+            ),
+            "sdxl-1.0": client.StabilityInference(
+                key = os.environ.get('STABILITY_API_KEY'),
+                engine='stable-diffusion-xl-1024-v1-0"',
                 verbose=True
             )
 
