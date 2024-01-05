@@ -66,12 +66,13 @@ class ImagineView(discord.ui.View):
         
         engine = select.values[0]
         await interaction.response.defer()
+        image_size = 512 if engine in ["v1.6", "v2.1"] else 1024
         images = self.stability_api[engine].generate(
             prompt=self.prompt,  
             steps=30,
             cfg_scale=8.0,
-            width=512,
-            height=512,
+            width=image_size,
+            height=image_size,
             samples=4,
         )
 
@@ -102,7 +103,7 @@ class Imagine(commands.Cog):
         self.bot = bot
         os.environ["STABILITY_HOST"] = 'grpc.stability.ai:443'
         self.stability_api = { 
-            "v1.5": client.StabilityInference(
+            "v1.6": client.StabilityInference(
                 key = os.environ.get('STABILITY_API_KEY'),
                 engine='stable-diffusion-v1-6',
                 verbose=True
@@ -132,7 +133,7 @@ class Imagine(commands.Cog):
 
     @tangerine_only()
     @commands.slash_command(guild_ids=[234119683538812928, 1065746636275453972], description="Generate an image from a prompt")
-    async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "v1.5", steps: int = 30, style: Option(str, description="The style to use", choices=styles, required=False) = None):
+    async def imagine(self, ctx, prompt: str, engine: Option(str, description="The engine to use", choices=engines, required=False) = "v1.6", steps: int = 30, style: Option(str, description="The style to use", choices=styles, required=False) = None):
 
         if steps < 10: 
             await ctx.respond("You must generate at least 10 steps.", ephemeral=True)
@@ -151,14 +152,15 @@ class Imagine(commands.Cog):
             await ctx.followup.send("150 is the maximum amount of steps.", ephemeral=True)
             return
 
+        image_size = 512 if engine in ["v1.6", "v2.1"] else 1024
 
         if style is not None:
             images = self.stability_api[engine].generate(
                 prompt=prompt,  
                 steps=steps,
                 cfg_scale=8.0,
-                width=512,
-                height=512,
+                width=image_size,
+                height=image_size,
                 samples=4,
                 style_preset = style
             )
@@ -168,8 +170,8 @@ class Imagine(commands.Cog):
                 prompt=prompt,  
                 steps=steps,
                 cfg_scale=8.0,
-                width=512,
-                height=512,
+                width=image_size,
+                height=image_size,
                 samples=4
             )
 
