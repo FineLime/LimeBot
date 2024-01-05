@@ -11,7 +11,7 @@ from stuff.patreon_only import tangerine_only, get_patreon_tier
 from discord import Option
 
 engines = [ 
-    'v1.5',
+    'v1.6',
     'v2.1',
     'sdxl-0.9',
     'sdxl-1.0',
@@ -55,7 +55,7 @@ class ImagineView(discord.ui.View):
         min_values=1,
         max_values=1,
         options=[
-            discord.SelectOption(label="v1.5", value="v1.5"),
+            discord.SelectOption(label="v1.6", value="v1.6"),
             discord.SelectOption(label="v2.1", value="v2.1"),
             discord.SelectOption(label="sdxl-0.9", value="sdxl-0.9"),
             discord.SelectOption(label="sdxl-1.0", value="sdxl-1.0"),
@@ -104,7 +104,7 @@ class Imagine(commands.Cog):
         self.stability_api = { 
             "v1.5": client.StabilityInference(
                 key = os.environ.get('STABILITY_API_KEY'),
-                engine='stable-diffusion-v1-5',
+                engine='stable-diffusion-v1-6',
                 verbose=True
             ),
             "v2.1": client.StabilityInference(
@@ -152,15 +152,26 @@ class Imagine(commands.Cog):
             return
 
 
+        if style is not None:
+            images = self.stability_api[engine].generate(
+                prompt=prompt,  
+                steps=steps,
+                cfg_scale=8.0,
+                width=512,
+                height=512,
+                samples=4,
+                style_preset = style
+            )
 
-        images = self.stability_api[engine].generate(
-            prompt=prompt,  
-            steps=steps,
-            cfg_scale=8.0,
-            width=512,
-            height=512,
-            samples=4
-        )
+        else:
+            images = self.stability_api[engine].generate(
+                prompt=prompt,  
+                steps=steps,
+                cfg_scale=8.0,
+                width=512,
+                height=512,
+                samples=4
+            )
 
         files = []
         for resp in images: 
