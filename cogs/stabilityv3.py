@@ -69,7 +69,7 @@ class Imagine(commands.Cog):
 
         
 
-    @imagine.error
+    @imaginev3.error
     async def imagine_error(self, ctx, error):
         
         if error.__class__.__name__ == "CheckFailure":
