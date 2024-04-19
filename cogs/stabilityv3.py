@@ -30,7 +30,7 @@ import requests
 #     raise Exception(str(response.json()))
 
 
-class Imagine(commands.Cog):
+class ImagineV3(commands.Cog):
 
     def __init__(self, bot):
 
@@ -80,4 +80,4 @@ class Imagine(commands.Cog):
                     
 
 def setup(bot):
-    bot.add_cog(Imagine(bot))
+    bot.add_cog(ImagineV3(bot))
