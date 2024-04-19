@@ -70,7 +70,7 @@ class ImagineV3(commands.Cog):
         
 
     @imaginev3.error
-    async def imagine_error(self, ctx, error):
+    async def imaginev3_error(self, ctx, error):
         
         if error.__class__.__name__ == "CheckFailure":
             await ctx.respond("This command is only available to Tangerine Patrons.\nYou can become a patron at https://www.patreon.com/FineLime\n\nIf you are a patron, please make sure you have linked your Discord account to your Patreon account and have waited at least 5 minutes for the cache to update.", ephemeral=True)
