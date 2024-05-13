@@ -92,7 +92,7 @@ class ChatGPT(commands.Cog):
         await ctx.defer()
 
         response = openai.ChatCompletion.create(
-            model = "gpt-4",
+            model = "gpt-4o",
             messages = [
                 {"role": "system", "content": "You are a helpful assistant which will answer questions given."},
                 {"role": "user", "content": prompt}
@@ -112,7 +112,7 @@ class ChatGPT(commands.Cog):
         await ctx.defer()
 
         response = openai.ChatCompletion.create(
-            model = "gpt-4",
+            model = "gpt-4o",
             messages = [
                 {"role": "system", "content": ais[ai]},
                 {"role": "user", "content": prompt}
