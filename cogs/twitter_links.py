@@ -26,7 +26,7 @@ class FixXLinks(commands.Cog):
                 new_message += f"\n{fixed_link}"
 
         
-            await message.channel.send(f"Hey, I fixed those X links for you! {message.author.mention} {message.content}") 
+            await message.channel.send(f"Hey, I fixed those X links for you! {new_message}")
 
 
 def setup(bot):
